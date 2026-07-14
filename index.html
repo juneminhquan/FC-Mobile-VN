@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FC Mobile VN - Đội Hình Đỉnh Cao</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background: #0d0d11;
+            color: white;
+            touch-action: none;
+            user-select: none;
+        }
+
+        /* Gold premium gradient background */
+        .fc-bg {
+            background: radial-gradient(circle at center, #1e3c1a 0%, #0a140a 100%);
+        }
+
+        /* Beautiful FC Card style mimicking the uploaded image */
+        .fc-card {
+            background: linear-gradient(135deg, #7a1515 0%, #3a0505 50%, #150000 100%);
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3), inset 0 0 10px rgba(255, 215, 0, 0.2);
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            aspect-ratio: 1 / 1.35;
+        }
+
+        .fc-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+            z-index: 50;
+        }
+
+        .fc-card.selected {
+            border: 3px solid #ff4d4d;
+            box-shadow: 0 0 25px #ff4d4d;
+        }
+
+        /* Glowing text effect */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(218, 37, 29, 0.5);
+        }
+
+        .gold-glow {
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.9);
+        }
+
+        /* Tactical Board style layout */
+        .tactical-board {
+            background-image: 
+                radial-gradient(circle at 50% 100%, transparent 60%, rgba(255,255,255,0.05) 60%),
+                linear-gradient(rgba(255,255,255,0.05) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 2px, transparent 2px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body class="fc-bg">
+
+<div id="game-container" class="relative w-screen h-screen flex flex-col justify-between overflow-hidden">
+    
+    <!-- UI Top: Scoreboard during gameplay -->
+    <div id="gameplay-hud" class="hidden absolute top-4 left-0 w-full px-6 flex justify-between items-center z-40 pointer-events-none">
+        <div class="bg-black/80 backdrop-blur-md px-4 py-2 rounded-xl border-l-4 border-red-600 shadow-lg pointer-events-auto">
+            <div id="hud-match-title" class="text-[9px] uppercase font-bold tracking-widest text-yellow-400">TẤN CÔNG NHANH</div>
+            <div class="text-xl font-extrabold flex items-center gap-2">
+                <span class="text-red-500">VN</span> <span id="score-val" class="text-white">0</span>
+                <span class="text-gray-500">-</span>
+                <span id="opp-score-val" class="text-white">0</span> <span id="opp-flag-hud" class="text-green-400">GK</span>
+            </div>
+        </div>
+
+        <!-- Real penalty turn indicator dots -->
+        <div id="penalty-dots-hud" class="flex gap-1.5 bg-black/50 p-2 rounded-lg border border-white/10">
+            <!-- Will be dynamically filled with dot icons -->
+        </div>
+
+        <div id="active-shooter-hud" class="bg-black/80 backdrop-blur-md px-4 py-2 rounded-xl border-r-4 border-yellow-500 shadow-lg pointer-events-auto flex items-center gap-3">
+            <div class="text-right">
+                <div class="text-xs font-bold" id="hud-player-name">N. QUANG HẢI</div>
+                <div class="text-[10px] text-yellow-400 font-semibold" id="hud-player-stats">SÚT: 122 | XOÁY: 118</div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-black font-black text-xs">
+                120
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Game Screen (Canvas for gameplay phases) -->
+    <canvas id="gameCanvas" class="w-full h-full block absolute inset-0 z-10"></canvas>
+
+    <!-- Custom Alerts or Gooooal text overlays -->
+    <div id="message" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl sm:text-6xl font-black text-center uppercase tracking-wider z-50 pointer-events-none transition-all duration-300 scale-50 opacity-0 glow-text">
+        VÀOOO!
+    </div>
+
+    <!-- Back to menu button (Only visible in-game) -->
+    <button id="btn-back-menu" class="hidden absolute bottom-6 left-6 z-40 bg-black/80 hover:bg-red-700 hover:text-white border border-gray-700 text-gray-300 px-4 py-2.5 rounded-xl font-bold transition-all text-xs flex items-center gap-2">
+        ← RỜI TRẬN
+    </button>
+
+    <!-- Mode switch indicator / swipe indicator -->
+    <div id="game-tip" class="hidden absolute bottom-6 right-6 z-40 bg-black/60 backdrop-blur-md px-4 py-2 rounded-lg text-xs text-gray-300 border border-white/10 max-w-xs text-right">
+        💡 <span id="tip-text">Vuốt trái/phải để rê bóng né hậu vệ!</span>
+    </div>
+
+    <!-- MAIN MENU & SQUAD SELECTION SCREEN -->
+    <div id="main-menu" class="absolute inset-0 z-50 flex flex-col justify-between bg-gradient-to-b from-[#0e1811] via-[#070b08] to-[#120505] overflow-y-auto p-4 md:p-8">
+        
+        <!-- Header -->
+        <div class="w-full flex flex-col md:flex-row justify-between items-center border-b border-yellow-500/20 pb-4">
+            <div class="text-center md:text-left mb-4 md:mb-0">
+                <h1 class="text-3xl md:text-5xl font-black tracking-tighter text-[#da251d]">FC MOBILE <span class="text-white glow-text">VN</span></h1>
+                <p class="text-xs md:text-sm text-yellow-500 font-bold uppercase tracking-widest mt-1">✪ Đội Hình Tiêu Biểu Việt Nam Đỉnh Cao ✪</p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-3 items-center">
+                <!-- Difficulty Selector Buttons -->
+                <div class="bg-black/40 p-1 rounded-xl border border-white/10 flex gap-1">
+                    <button onclick="setDifficulty('EASY')" id="diff-easy-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-gray-800 text-gray-400 hover:text-white">
+                        Gà Con 🐣
+                    </button>
+                    <button onclick="setDifficulty('NORMAL')" id="diff-normal-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-red-600 text-white shadow-lg shadow-red-600/30">
+                        Thường ⚽
+                    </button>
+                    <button onclick="setDifficulty('HARD')" id="diff-hard-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-gray-800 text-gray-400 hover:text-white">
+                        Huyền Thoại 👑
+                    </button>
+                </div>
+
+                <div class="flex gap-2">
+                    <button onclick="switchGameMode('TOURNAMENT')" id="mode-tournament-btn" class="bg-yellow-600 text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm shadow-lg shadow-yellow-600/30 border border-yellow-500 uppercase tracking-wider transition-all scale-105">
+                        Giải Đấu 🏆
+                    </button>
+                    <button onclick="switchGameMode('SHOOT')" id="mode-shoot-btn" class="bg-gray-800 text-gray-400 hover:bg-red-700 hover:text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm border border-transparent uppercase tracking-wider transition-all">
+                        Sút Phạt
+                    </button>
+                    <button onclick="switchGameMode('GK')" id="mode-gk-btn" class="bg-gray-800 text-gray-400 hover:bg-green-700 hover:text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm border border-transparent uppercase tracking-wider transition-all">
+                        Thủ Môn
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tactical lineup & selected player showcase -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-6 items-stretch flex-grow">
+            
+            <!-- Tactical Board (4-3-3 representation) -->
+            <div class="lg:col-span-8 tactical-board p-4 flex flex-col justify-between relative min-h-[450px]">
+                <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 border-t border-dashed border-white/10 pointer-events-none"></div>
+                <div class="absolute top-4 left-1/2 -translate-x-1/2 w-48 h-24 border border-white/10 rounded-b-3xl pointer-events-none"></div>
+                
+                <!-- Forwards (ST, ST, RW) -->
+                <div class="flex justify-around items-center z-10">
+                    <div id="slot-1" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(1)"></div>
+                    <div id="slot-2" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(2)"></div>
+                    <div id="slot-3" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(3)"></div>
+                </div>
+
+                <!-- Midfielders (CM, CAM, CM) -->
+                <div class="flex justify-around items-center z-10 my-4">
+                    <div id="slot-4" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(4)"></div>
+                    <div id="slot-5" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(5)"></div>
+                    <div id="slot-6" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(6)"></div>
+                </div>
+
+                <!-- Defenders (LB, CB, CB, RB) -->
+                <div class="flex justify-around items-center z-10">
+                    <div id="slot-7" class="w-[18%] max-w-[80px]" onclick="selectLineupPlayer(7)"></div>
+                    <div id="slot-8" class="w-[18%] max-w-[80px]" onclick="selectLineupPlayer(8)"></div>
+                    <div id="slot-9" class="w-[18%] max-w-[80px]" onclick="selectLineupPlayer(9)"></div>
+                    <div id="slot-10" class="w-[18%] max-w-[80px]" onclick="selectLineupPlayer(10)"></div>
+                </div>
+
+                <!-- Goalkeeper -->
+                <div class="flex justify-center items-center z-10 mt-4">
+                    <div id="slot-11" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(11)"></div>
+                </div>
+            </div>
+
+            <!-- Selected Player Statistics card -->
+            <div class="lg:col-span-4 bg-black/60 border border-yellow-500/20 rounded-2xl p-6 flex flex-col justify-between items-center text-center">
+                
+                <!-- Tournament Campaign UI Panel (Only shown in Tournament Mode) -->
+                <div id="tournament-panel" class="w-full mb-4 bg-yellow-950/20 border border-yellow-500/30 p-4 rounded-xl text-left">
+                    <h4 class="text-xs font-black text-yellow-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                        🏆 Bản đồ Giải Đấu Đỉnh Cao
+                    </h4>
+                    <div class="space-y-2.5 text-xs">
+                        <div id="t-round-1" class="flex justify-between items-center p-2 rounded bg-white/5 border border-white/5">
+                            <span class="font-bold">Quarter-final: vs Indonesia 🇮🇩</span>
+                            <span class="text-[10px] font-black text-yellow-500" id="t-status-1">SẴN SÀNG</span>
+                        </div>
+                        <div id="t-round-2" class="flex justify-between items-center p-2 rounded bg-black/20 text-gray-500">
+                            <span class="font-semibold">Semi-final: vs Thái Lan 🇹🇭</span>
+                            <span class="text-[10px] font-bold" id="t-status-2">CHƯA MỞ</span>
+                        </div>
+                        <div id="t-round-3" class="flex justify-between items-center p-2 rounded bg-black/20 text-gray-500">
+                            <span class="font-semibold">Chung Kết: vs Nhật Bản 🇯🇵</span>
+                            <span class="text-[10px] font-bold" id="t-status-3">KHOÁ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-[11px] font-bold text-yellow-500 uppercase tracking-widest mb-2">✪ Cầu Thủ Đang Chọn ✪</h3>
+                    <div id="showcase-card-container" class="w-36 mx-auto mb-4">
+                        <!-- Dynamic FC Card rendering goes here -->
+                    </div>
+                </div>
+
+                <div class="w-full space-y-3">
+                    <div>
+                        <div class="flex justify-between text-[10px] font-semibold text-gray-400 mb-0.5">
+                            <span>Kỹ năng Sút phạt</span>
+                            <span id="stat-shoot-val">99%</span>
+                        </div>
+                        <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                            <div id="stat-shoot-bar" class="bg-gradient-to-r from-red-500 to-yellow-500 h-full" style="width: 90%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-[10px] font-semibold text-gray-400 mb-0.5">
+                            <span>Sút Xoáy (Curve)</span>
+                            <span id="stat-curve-val">95%</span>
+                        </div>
+                        <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                            <div id="stat-curve-bar" class="bg-gradient-to-r from-red-500 to-yellow-500 h-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+
+                    <button onclick="launchMatch()" class="w-full bg-gradient-to-r from-[#da251d] to-[#ff5d55] text-white font-black py-3 px-5 rounded-xl text-sm uppercase tracking-wider shadow-lg shadow-red-600/20 hover:shadow-red-600/40 transition-all hover:scale-[1.02] active:scale-[0.98]">
+                        Ra Sân Ngay
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer / Credits -->
+        <div class="w-full text-center text-[10px] text-gray-500 border-t border-white/5 pt-4">
+            FC Mobile VN - Phiên Bản Đội Hình Đỉnh Cao 2026. Phát triển dựa trên sơ đồ chiến thuật tối thượng 4-3-3.
+        </div>
+    </div>
+</div>
+
+<script>
+    // Audio synthesis context
+    let audioCtx = null;
+
+    function playSound(type) {
+        try {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'kick') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } else if (type === 'goal') {
+                // Synthesize a crowd cheering noise
+                const bufferSize = audioCtx.sampleRate * 1.5;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+                filter.frequency.exponentialRampToValueAtTime(1500, audioCtx.currentTime + 0.5);
+
+                const noiseGain = audioCtx.createGain();
+                noiseGain.gain.setValueAtTime(0, audioCtx.currentTime);
+                noiseGain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.2);
+                noiseGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+
+                noise.connect(filter);
+                filter.connect(noiseGain);
+                noiseGain.connect(audioCtx.destination);
+                noise.start();
+            } else if (type === 'post') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            } else if (type === 'save') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'whistle') {
+                // Referee whistle: High pitch double beep
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.7, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.7, audioCtx.currentTime + 0.18);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.45);
+            } else if (type === 'fanfare') {
+                const notes = [261.63, 329.63, 392.00, 523.25];
+                notes.forEach((freq, idx) => {
+                    const o = audioCtx.createOscillator();
+                    const g = audioCtx.createGain();
+                    o.type = 'triangle';
+                    o.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.1);
+                    g.gain.setValueAtTime(0.15, audioCtx.currentTime + idx * 0.1);
+                    g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + idx * 0.1 + 0.8);
+                    o.connect(g);
+                    g.connect(audioCtx.destination);
+                    o.start(audioCtx.currentTime + idx * 0.1);
+                    o.stop(audioCtx.currentTime + idx * 0.1 + 0.8);
+                });
+            }
+        } catch (e) {
+            console.log("Audio context issue: ", e);
+        }
+    }
+
+    const SQUAD = [
+        { id: 1, name: "NGUYỄN VĂN TOÀN", pos: "ST", rating: 119, num: 19, shoot: 118, curve: 110 },
+        { id: 2, name: "NGUYỄN XUÂN SƠN", pos: "ST", rating: 120, num: 30, shoot: 124, curve: 108 },
+        { id: 3, name: "N. CÔNG PHƯỢNG", pos: "RW", rating: 119, num: 10, shoot: 119, curve: 121 },
+        { id: 4, name: "ĐỖ HÙNG DŨNG", pos: "CM", rating: 120, num: 8, shoot: 112, curve: 114 },
+        { id: 5, name: "N. QUANG HẢI", pos: "CAM", rating: 120, num: 19, shoot: 122, curve: 125 },
+        { id: 6, name: "N. HOÀNG ĐỨC", pos: "CM", rating: 120, num: 14, shoot: 115, curve: 119 },
+        { id: 7, name: "ĐOÀN VĂN HẬU", pos: "LB", rating: 119, num: 5, shoot: 109, curve: 115 },
+        { id: 8, name: "QUẾ NGỌC HẢI", pos: "CB", rating: 119, num: 3, shoot: 102, curve: 95 },
+        { id: 9, name: "N. THÀNH CHUNG", pos: "CB", rating: 119, num: 16, shoot: 100, curve: 88 },
+        { id: 10, name: "VŨ VĂN THANH", pos: "RB", rating: 119, num: 17, shoot: 110, curve: 112 },
+        { id: 11, name: "BÙI TẤN TRƯỜNG", pos: "GK", rating: 119, num: 1, shoot: 65, curve: 50 }
+    ];
+
+    const TOURNAMENT_ROUNDS = [
+        { round: 1, opponent: "Indonesia 🇮🇩", flag: "IDN", gkRating: 112, shootRating: 110 },
+        { round: 2, opponent: "Thái Lan 🇹🇭", flag: "THA", gkRating: 116, shootRating: 115 },
+        { round: 3, opponent: "Nhật Bản 🇯🇵", flag: "JPN", gkRating: 120, shootRating: 120 }
+    ];
+
+    let currentSelectedId = 5; 
+    let currentGameMode = 'TOURNAMENT'; 
+    let currentDifficulty = 'NORMAL'; 
+    let currentTournamentRound = 1; 
+
+    // Game Core State Machine
+    // 'MENU', 'DRIBBLE_RUN', 'AIMING', 'KICKING', 'GOAL_CELEBRATION', 'SAVED', 'OUT'
+    let gameState = 'MENU'; 
+
+    let score = 0; 
+    let misses = 0; 
+    let shootoutTurn = 0; 
+    let userShootoutResults = []; 
+    let oppShootoutResults = [];
+    let confettiParticles = [];
+
+    // Physics variables
+    let ball = { x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, radius: 16, spin: 0 };
+    let goalie = { x: 0, y: 0, w: 60, h: 90, targetX: 0, targetY: 0, isDiving: false };
+    let goal = { x: 0, y: 0, w: 0, h: 0 };
+
+    // Interactive Defensive Wall (Hàng rào sút phạt)
+    let isFreeKick = false;
+    let wallDefenders = []; // Array of defender objects {x, y, z, jumpOffset}
+    let wallJumping = false;
+    let wallJumpTimer = 0;
+
+    // Dribbling (Tấn công nhanh) Phase variables
+    let dribbler = { x: 0, y: 0, targetX: 0, width: 40, speed: 6 };
+    let fieldScrollY = 0;
+    let defensiveTacklers = []; // Opponent defenders trying to tackle
+    let dribblingProgress = 0; // 0 to 100% of the run
+    let lastTacklerSpawnTime = 0;
+    let dribbleStatusText = "";
+
+    // Input touch tracking
+    let touchStart = { x: 0, y: 0, time: 0 };
+    let touchPoints = []; 
+    let isDrawingSwipe = false;
+
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Load initial configurations
+    function init() {
+        renderSquadTactical();
+        updateSelectedPlayerUI();
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Setup touch & mouse interaction
+        canvas.addEventListener('mousedown', onSwipeStart);
+        canvas.addEventListener('mousemove', onSwipeMove);
+        canvas.addEventListener('mouseup', onSwipeEnd);
+
+        canvas.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            onSwipeStart({ clientX: touch.clientX, clientY: touch.clientY });
+        }, { passive: true });
+        canvas.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            onSwipeMove({ clientX: touch.clientX, clientY: touch.clientY });
+        }, { passive: true });
+        canvas.addEventListener('touchend', onSwipeEnd);
+
+        document.getElementById('btn-back-menu').addEventListener('click', () => {
+            exitToMenu();
+        });
+
+        switchGameMode('TOURNAMENT');
+    }
+
+    function renderSquadTactical() {
+        SQUAD.forEach(p => {
+            const container = document.getElementById(`slot-${p.id}`);
+            if (container) {
+                container.innerHTML = createCardHTML(p);
+            }
+        });
+    }
+
+    function createCardHTML(p) {
+        return `
+            <div class="fc-card rounded-xl overflow-hidden relative border flex flex-col justify-between p-1 md:p-2 text-center cursor-pointer ${currentSelectedId === p.id ? 'selected' : ''}" data-player-id="${p.id}">
+                <div class="flex justify-between items-start">
+                    <div class="text-[7px] md:text-[9px] bg-red-600 text-white font-black px-1 rounded-sm shadow border border-yellow-500">30</div>
+                    <div class="flex flex-col items-end">
+                        <span class="text-xs md:text-sm font-black leading-none text-yellow-400 gold-glow">${p.rating}</span>
+                        <span class="text-[7px] md:text-[9px] font-bold text-gray-300 leading-none">${p.pos}</span>
+                    </div>
+                </div>
+
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-25 w-12 md:w-16 h-12 md:h-16 flex items-center justify-center pointer-events-none">
+                    <svg viewBox="0 0 24 24" fill="#ffd700" class="w-full h-full">
+                        <path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192L12 .587z"/>
+                    </svg>
+                </div>
+
+                <div class="my-0.5 flex justify-center items-center z-10 relative">
+                    <div class="w-7 md:w-10 h-7 md:h-10 rounded-full border border-yellow-500 bg-red-700/80 flex items-center justify-center text-white font-extrabold text-xs">
+                        ${p.num}
+                    </div>
+                </div>
+
+                <div class="z-10 bg-black/50 py-0.5 rounded border border-yellow-500/20">
+                    <div class="text-[6px] md:text-[8px] font-black text-white truncate px-1">${p.name.split(' ').slice(-2).join(' ')}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function selectLineupPlayer(id) {
+        if (currentGameMode === 'GK') return; 
+        currentSelectedId = id;
+        renderSquadTactical();
+        updateSelectedPlayerUI();
+    }
+
+    function updateSelectedPlayerUI() {
+        const player = SQUAD.find(p => p.id === currentSelectedId);
+        const container = document.getElementById('showcase-card-container');
+        container.innerHTML = createCardHTML(player);
+
+        // Update stats
+        document.getElementById('stat-shoot-val').innerText = player.shoot + ' OVR';
+        document.getElementById('stat-shoot-bar').style.width = ((player.shoot / 130) * 100) + '%';
+        
+        document.getElementById('stat-curve-val').innerText = player.curve + ' OVR';
+        document.getElementById('stat-curve-bar').style.width = ((player.curve / 130) * 100) + '%';
+    }
+
+    function setDifficulty(level) {
+        currentDifficulty = level;
+        const easyBtn = document.getElementById('diff-easy-btn');
+        const normalBtn = document.getElementById('diff-normal-btn');
+        const hardBtn = document.getElementById('diff-hard-btn');
+
+        [easyBtn, normalBtn, hardBtn].forEach(btn => {
+            btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-gray-800 text-gray-400 hover:text-white";
+        });
+
+        if (level === 'EASY') {
+            easyBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-yellow-600 text-white shadow-lg shadow-yellow-600/30";
+        } else if (level === 'NORMAL') {
+            normalBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-red-600 text-white shadow-lg shadow-red-600/30";
+        } else if (level === 'HARD') {
+            hardBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-purple-600 text-white shadow-lg shadow-purple-600/30";
+        }
+    }
+
+    function switchGameMode(mode) {
+        currentGameMode = mode;
+        const tourBtn = document.getElementById('mode-tournament-btn');
+        const shootBtn = document.getElementById('mode-shoot-btn');
+        const gkBtn = document.getElementById('mode-gk-btn');
+        const tPanel = document.getElementById('tournament-panel');
+
+        [tourBtn, shootBtn, gkBtn].forEach(btn => {
+            btn.className = "bg-gray-800 text-gray-400 hover:text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm border border-transparent uppercase tracking-wider transition-all";
+        });
+
+        if (mode === 'TOURNAMENT') {
+            tourBtn.className = "bg-yellow-600 text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm shadow-lg shadow-yellow-600/30 border border-yellow-500 uppercase tracking-wider transition-all scale-105";
+            tPanel.style.display = 'block';
+            document.getElementById('tip-text').innerText = "Giải đấu Đỉnh cao 🏆: Sút và Đỡ luân phiên kịch tính!";
+            updateTournamentMap();
+        } else {
+            tPanel.style.display = 'none';
+            if (mode === 'SHOOT') {
+                shootBtn.className = "bg-red-600 text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm shadow-lg shadow-red-600/30 border border-red-500 uppercase tracking-wider transition-all scale-105";
+                document.getElementById('tip-text').innerText = "Rê bóng vượt qua hậu vệ để kiếm Penalty hoặc Đá phạt!";
+            } else {
+                gkBtn.className = "bg-green-600 text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm shadow-lg shadow-green-600/30 border border-green-500 uppercase tracking-wider transition-all scale-105";
+                document.getElementById('tip-text').innerText = "Vuốt thủ môn Bùi Tấn Trường để cản phá những quả sút hiểm của đối thủ.";
+                selectLineupPlayer(11); 
+            }
+        }
+    }
+
+    function updateTournamentMap() {
+        for (let r = 1; r <= 3; r++) {
+            const item = document.getElementById(`t-round-${r}`);
+            const status = document.getElementById(`t-status-${r}`);
+            if (r < currentTournamentRound) {
+                item.className = "flex justify-between items-center p-2 rounded bg-green-950/40 text-green-400 border border-green-500/20";
+                status.innerText = "ĐÃ THẮNG ✓";
+            } else if (r === currentTournamentRound) {
+                item.className = "flex justify-between items-center p-2 rounded bg-yellow-500/10 text-white border border-yellow-500/40 animate-pulse";
+                status.innerText = "SẴN SÀNG";
+            } else {
+                item.className = "flex justify-between items-center p-2 rounded bg-black/40 text-gray-600";
+                status.innerText = "CHƯA MỞ";
+            }
+        }
+    }
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        goal.w = Math.min(canvas.width * 0.7, 450);
+        goal.h = goal.w * 0.38;
+        goal.x = canvas.width / 2 - goal.w / 2;
+        goal.y = canvas.height * 0.28;
+
+        resetArena();
+    }
+
+    function resetArena() {
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height * 0.85;
+        ball.z = 0;
+        ball.vx = 0;
+        ball.vy = 0;
+        ball.vz = 0;
+        ball.spin = 0;
+
+        goalie.x = canvas.width / 2;
+        goalie.y = goal.y + goal.h;
+        goalie.isDiving = false;
+        goalie.targetX = goalie.x;
+        goalie.targetY = goalie.y;
+
+        // Reset the defensive wall
+        isFreeKick = false;
+        wallDefenders = [];
+        wallJumping = false;
+        wallJumpTimer = 0;
+    }
+
+    // Set up a dynamic dribble run
+    function startDribbleRun() {
+        gameState = 'DRIBBLE_RUN';
+        dribblingProgress = 0;
+        dribbleStatusText = "BẮT ĐẦU TẤN CÔNG NHANH!";
+        dribbler.x = canvas.width / 2;
+        dribbler.targetX = canvas.width / 2;
+        defensiveTacklers = [];
+        lastTacklerSpawnTime = Date.now();
+        document.getElementById('tip-text').innerText = "Vuốt trái/phải hoặc bấm chuột để dẫn bóng né hậu vệ!";
+        document.getElementById('hud-match-title').innerText = "TẤN CÔNG NHANH";
+    }
+
+    function launchMatch() {
+        document.getElementById('main-menu').classList.add('hidden');
+        document.getElementById('gameplay-hud').classList.remove('hidden');
+        document.getElementById('btn-back-menu').classList.remove('hidden');
+        document.getElementById('game-tip').classList.remove('hidden');
+
+        score = 0;
+        misses = 0;
+        shootoutTurn = 0;
+        userShootoutResults = [];
+        oppShootoutResults = [];
+        confettiParticles = [];
+
+        if (currentGameMode === 'TOURNAMENT') {
+            const oppData = TOURNAMENT_ROUNDS[currentTournamentRound - 1];
+            document.getElementById('hud-match-title').innerText = `ĐỐI THỦ: ${oppData.opponent.toUpperCase()}`;
+            document.getElementById('opp-flag-hud').innerText = oppData.flag;
+            
+            currentSelectedId = 5; 
+            updateSelectedPlayerUI();
+            
+            renderPenaltyDots();
+            startDribbleRun();
+        } else {
+            document.getElementById('hud-match-title').innerText = currentGameMode === 'SHOOT' ? 'SÚT PHẠT ĐƠN' : 'TẬP ĐỠ GK';
+            document.getElementById('opp-flag-hud').innerText = currentGameMode === 'SHOOT' ? 'GK' : 'AI';
+            
+            if (currentGameMode === 'GK') {
+                currentSelectedId = 11;
+                updateSelectedPlayerUI();
+                triggerAIShooter();
+            } else {
+                startDribbleRun();
+            }
+        }
+        updateScoresUI();
+    }
+
+    function renderPenaltyDots() {
+        const dotsContainer = document.getElementById('penalty-dots-hud');
+        dotsContainer.innerHTML = '';
+        
+        for (let i = 0; i < 5; i++) {
+            let uColor = 'bg-gray-600';
+            if (userShootoutResults[i] === 'GOAL') uColor = 'bg-green-500';
+            else if (userShootoutResults[i] === 'MISS') uColor = 'bg-red-500';
+
+            let oColor = 'bg-gray-600';
+            if (oppShootoutResults[i] === 'GOAL') oColor = 'bg-green-400';
+            else if (oppShootoutResults[i] === 'MISS') oColor = 'bg-red-500';
+
+            dotsContainer.innerHTML += `
+                <div class="flex flex-col items-center gap-1">
+                    <div class="w-2.5 h-2.5 rounded-full ${uColor}"></div>
+                    <div class="w-2.5 h-2.5 rounded-full ${oColor} opacity-70"></div>
+                </div>
+            `;
+        }
+    }
+
+    function exitToMenu() {
+        document.getElementById('main-menu').classList.remove('hidden');
+        document.getElementById('gameplay-hud').classList.add('hidden');
+        document.getElementById('btn-back-menu').classList.add('hidden');
+        document.getElementById('game-tip').classList.add('hidden');
+        gameState = 'MENU';
+        updateTournamentMap();
+    }
+
+    function updateScoresUI() {
+        document.getElementById('score-val').innerText = score;
+        document.getElementById('opp-score-val').innerText = misses;
+        if (currentGameMode === 'TOURNAMENT') {
+            renderPenaltyDots();
+        }
+    }
+
+    // Input handlers
+    function onSwipeStart(e) {
+        const x = e.clientX || e.touches[0].clientX;
+        const y = e.clientY || e.touches[0].clientY;
+
+        if (gameState === 'DRIBBLE_RUN') {
+            // Click/tap left/right of screen to steer dribbler quickly
+            dribbler.targetX = x;
+            return;
+        }
+
+        if (gameState !== 'AIMING') return;
+
+        const isUserGK = (currentGameMode === 'GK') || (currentGameMode === 'TOURNAMENT' && shootoutTurn % 2 === 1);
+
+        if (isUserGK) {
+            isDrawingSwipe = true;
+            touchStart.x = x;
+            touchStart.y = y;
+            touchStart.time = Date.now();
+            return;
+        }
+
+        const distToBall = Math.hypot(x - ball.x, y - ball.y);
+        if (distToBall < 120) {
+            isDrawingSwipe = true;
+            touchStart.x = x;
+            touchStart.y = y;
+            touchStart.time = Date.now();
+            touchPoints = [{ x, y }];
+        }
+    }
+
+    function onSwipeMove(e) {
+        const x = e.clientX || e.touches[0].clientX;
+        const y = e.clientY || e.touches[0].clientY;
+
+        if (gameState === 'DRIBBLE_RUN') {
+            dribbler.targetX = x;
+            return;
+        }
+
+        if (!isDrawingSwipe) return;
+
+        const isUserGK = (currentGameMode === 'GK') || (currentGameMode === 'TOURNAMENT' && shootoutTurn % 2 === 1);
+        if (!isUserGK) {
+            touchPoints.push({ x, y });
+        }
+    }
+
+    function onSwipeEnd(e) {
+        if (!isDrawingSwipe) return;
+        isDrawingSwipe = false;
+
+        const endX = e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || touchPoints[touchPoints.length - 1].x;
+        const endY = e.clientY || (e.changedTouches && e.changedTouches[0].clientY) || touchPoints[touchPoints.length - 1].y;
+
+        const duration = Math.max(50, Date.now() - touchStart.time);
+        const dx = endX - touchStart.x;
+        const dy = endY - touchStart.y;
+        const distance = Math.hypot(dx, dy);
+
+        if (distance < 30) return;
+
+        const isUserGK = (currentGameMode === 'GK') || (currentGameMode === 'TOURNAMENT' && shootoutTurn % 2 === 1);
+
+        if (!isUserGK) {
+            // USER SHOOTS BALL
+            const speed = Math.min(18, (distance / duration) * 8); 
+            const angle = Math.atan2(dy, dx);
+            
+            ball.vx = Math.cos(angle) * speed;
+            ball.vy = Math.sin(angle) * speed;
+            ball.vz = speed * 1.5;
+
+            ball.spin = calculateSwipeCurve() * 0.12;
+
+            gameState = 'KICKING';
+            playSound('kick');
+
+            // Defensive wall jumps!
+            if (isFreeKick) {
+                wallJumping = true;
+                wallJumpTimer = 0;
+            }
+
+            triggerGoalieAI();
+        } else {
+            // USER DIVES AS GK
+            goalie.isDiving = true;
+            let gkSpeedMod = 1.2;
+            if (currentDifficulty === 'EASY') gkSpeedMod = 0.8;
+            if (currentDifficulty === 'HARD') gkSpeedMod = 1.6;
+
+            goalie.targetX = goalie.x + dx * gkSpeedMod;
+            goalie.targetY = goalie.y + dy * (gkSpeedMod * 0.5);
+            playSound('save');
+        }
+    }
+
+    function calculateSwipeCurve() {
+        if (touchPoints.length < 5) return 0;
+        let sumCurvature = 0;
+        for (let i = 2; i < touchPoints.length - 2; i++) {
+            const v1x = touchPoints[i].x - touchPoints[0].x;
+            const v1y = touchPoints[i].y - touchPoints[0].y;
+            const v2x = touchPoints[touchPoints.length - 1].x - touchPoints[i].x;
+            const v2y = touchPoints[touchPoints.length - 1].y - touchPoints[i].y;
+            
+            const cross = v1x * v2y - v1y * v2x;
+            sumCurvature += cross;
+        }
+        return sumCurvature / touchPoints.length;
+    }
+
+    function triggerGoalieAI() {
+        let reactionDelay = 150;
+        if (currentDifficulty === 'EASY') reactionDelay = 350;
+        if (currentDifficulty === 'HARD') reactionDelay = 60;
+
+        setTimeout(() => {
+            goalie.isDiving = true;
+            
+            const player = SQUAD.find(p => p.id === currentSelectedId);
+            const shootAccuracy = player ? player.shoot : 110;
+
+            const rollChance = Math.random() * 100;
+            let wrongDirectionChance = 20;
+
+            if (currentDifficulty === 'EASY') {
+                wrongDirectionChance = 70;
+            } else if (currentDifficulty === 'NORMAL') {
+                wrongDirectionChance = shootAccuracy > 120 ? 35 : 20;
+            } else if (currentDifficulty === 'HARD') {
+                wrongDirectionChance = 5;
+            }
+
+            if (rollChance < wrongDirectionChance) {
+                goalie.targetX = canvas.width / 2 + (Math.random() > 0.5 ? 180 : -180);
+                goalie.targetY = goal.y + goal.h * 0.4;
+            } else {
+                const finalAimX = ball.x + (ball.vx * 15);
+                goalie.targetX = Math.max(goal.x - 20, Math.min(goal.x + goal.w + 20, finalAimX));
+                
+                if (currentDifficulty === 'EASY') {
+                    goalie.targetX = (goalie.targetX + (canvas.width / 2)) / 2;
+                }
+                goalie.targetY = goal.y + goal.h * 0.5;
+            }
+        }, reactionDelay);
+    }
+
+    function triggerAIShooter() {
+        gameState = 'AIMING';
+        resetArena();
+
+        if (currentGameMode === 'TOURNAMENT') {
+            document.getElementById('tip-text').innerText = "ĐỐI THỦ SÚT! Vuốt nhanh để thủ môn Tấn Trường cản phá!";
+        }
+
+        const currentRoundData = TOURNAMENT_ROUNDS[currentTournamentRound - 1];
+        const statShoot = currentGameMode === 'TOURNAMENT' ? currentRoundData.shootRating : 110;
+
+        setTimeout(() => {
+            if (gameState !== 'AIMING') return;
+
+            const randomX = goal.x + Math.random() * goal.w;
+            const randomY = goal.y + Math.random() * goal.h;
+            
+            const dx = randomX - ball.x;
+            const dy = randomY - ball.y;
+            const angle = Math.atan2(dy, dx);
+            
+            let speed = 11 + Math.random() * 5;
+            if (statShoot < 112) speed = 8 + Math.random() * 3;
+            if (statShoot >= 120) speed = 14 + Math.random() * 5;
+
+            ball.vx = Math.cos(angle) * speed;
+            ball.vy = Math.sin(angle) * speed;
+            ball.vz = speed * 1.5;
+            
+            ball.spin = (Math.random() - 0.5) * 1.5;
+
+            gameState = 'KICKING';
+            playSound('kick');
+        }, 1800);
+    }
+
+    function checkResult() {
+        const goalieRadius = 45;
+        const distGK = Math.hypot(ball.x - goalie.x, ball.y - (goalie.y - 45));
+
+        const hitGoal = ball.x >= goal.x && ball.x <= goal.x + goal.w && ball.y >= goal.y && ball.y <= goal.y + goal.h;
+        const savedByGoalie = distGK < goalieRadius && ball.z > 350;
+
+        let result = 'MISS';
+
+        if (savedByGoalie) {
+            playSound('save');
+            showFeedback('BỊ CẢN PHÁ!', '#da251d');
+            result = 'SAVED';
+        } else if (!hitGoal) {
+            showFeedback('KHÔNG VÀO!', '#666');
+            result = 'MISS';
+        } else {
+            // Hit posts
+            const borderX = 15;
+            const borderY = 15;
+            const hitLeft = Math.abs(ball.x - goal.x) < borderX;
+            const hitRight = Math.abs(ball.x - (goal.x + goal.w)) < borderX;
+            const hitCrossbar = Math.abs(ball.y - goal.y) < borderY;
+
+            if (hitLeft || hitRight || hitCrossbar) {
+                ball.vx = -ball.vx * 0.6;
+                ball.vy = Math.abs(ball.vy) * 0.4;
+                ball.vz = -ball.vz * 0.3;
+                playSound('post');
+                showFeedback('DỘT CỘT DỌC!', '#fbbf24');
+                result = 'POST';
+            } else {
+                playSound('goal');
+                showFeedback('VÀOOO!', '#fbbf24');
+                result = 'GOAL';
+            }
+        }
+
+        // Apply results depending on current mode
+        if (currentGameMode === 'TOURNAMENT') {
+            const isUserTurn = (shootoutTurn % 2 === 0);
+            if (isUserTurn) {
+                if (result === 'GOAL') {
+                    score++;
+                    userShootoutResults.push('GOAL');
+                } else {
+                    userShootoutResults.push('MISS');
+                }
+            } else {
+                // Opponent turn
+                if (result === 'GOAL') {
+                    misses++;
+                    oppShootoutResults.push('GOAL');
+                } else {
+                    oppShootoutResults.push('MISS');
+                }
+            }
+            shootoutTurn++;
+            updateScoresUI();
+            
+            if (shootoutTurn >= 10) {
+                evaluateTournamentMatch();
+            } else {
+                setTimeout(() => {
+                    if (shootoutTurn % 2 === 1) {
+                        triggerAIShooter();
+                    } else {
+                        // Vietnam's turn to play again: start with another Dribble Run!
+                        currentSelectedId = Math.floor(Math.random() * 10) + 1; 
+                        updateSelectedPlayerUI();
+                        startDribbleRun();
+                    }
+                }, 2200);
+            }
+        } else {
+            // Simple mode scoring
+            if (result === 'GOAL') {
+                if (currentGameMode === 'SHOOT') score++;
+                else misses++;
+            } else {
+                if (currentGameMode === 'SHOOT') misses++;
+                else score++;
+            }
+            updateScoresUI();
+            
+            setTimeout(() => {
+                if (currentGameMode === 'GK') {
+                    triggerAIShooter();
+                } else {
+                    startDribbleRun();
+                }
+            }, 2200);
+        }
+    }
+
+    function evaluateTournamentMatch() {
+        const roundData = TOURNAMENT_ROUNDS[currentTournamentRound - 1];
+        
+        setTimeout(() => {
+            if (score > misses) {
+                playSound('fanfare');
+                triggerConfetti();
+
+                if (currentTournamentRound < 3) {
+                    showFeedback(`THẮNG TRẬN ${roundData.opponent}! NHẬN VÉ ĐI TIẾP!`, '#fbbf24');
+                    currentTournamentRound++;
+                    setTimeout(() => { exitToMenu(); }, 3500);
+                } else {
+                    showFeedback("🏆 VÔ ĐỊCH GIẢI ĐẤU ĐỈNH CAO! 🏆", '#ffd700');
+                    currentTournamentRound = 1; 
+                    setTimeout(() => { exitToMenu(); }, 5000);
+                }
+            } else {
+                showFeedback("BẠN ĐÃ BỊ LOẠI! HÃY THỬ LẠI", '#da251d');
+                setTimeout(() => { exitToMenu(); }, 3500);
+            }
+        }, 1500);
+    }
+
+    function triggerConfetti() {
+        confettiParticles = [];
+        for (let i = 0; i < 150; i++) {
+            confettiParticles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                vx: (Math.random() - 0.5) * 5,
+                vy: 2 + Math.random() * 5,
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                size: 5 + Math.random() * 10,
+                rotation: Math.random() * 360,
+                rotationSpeed: (Math.random() - 0.5) * 10
+            });
+        }
+    }
+
+    function showFeedback(text, color) {
+        const msgEl = document.getElementById('message');
+        msgEl.innerText = text;
+        msgEl.style.color = color;
+        msgEl.style.opacity = '1';
+        msgEl.style.transform = 'translate(-50%, -50%) scale(1)';
+        
+        setTimeout(() => {
+            msgEl.style.opacity = '0';
+            msgEl.style.transform = 'translate(-50%, -50%) scale(0.5)';
+        }, 2200);
+    }
+
+    // Trigger the foul aftermath and set piece type
+    function triggerFoul(progress) {
+        playSound('whistle');
+        gameState = 'KICK_TRANSITION'; // intermediate delay state
+
+        // If you progressed deep (>65%): Foul is inside box -> Penalty
+        // Otherwise: Foul is outside box -> Free kick
+        if (progress > 65) {
+            isFreeKick = false;
+            dribbleStatusText = "PHẠM LỖI TRONG VÒNG CẤM! PENALTY!";
+            showFeedback("PHẠT ĐỀN! ⚽", "#fbbf24");
+        } else {
+            isFreeKick = true;
+            dribbleStatusText = "PHẠM LỖI NGOÀI VÒNG CẤM! SÚT PHẠT!";
+            showFeedback("ĐÁ PHẠT HÀNG RÀO! 📐", "#da251d");
+        }
+
+        setTimeout(() => {
+            gameState = 'AIMING';
+            resetArena();
+            if (isFreeKick) {
+                // Spawn a defensive wall midway (z = 200)
+                setupDefensiveWall();
+                document.getElementById('tip-text').innerText = "Cứa lòng (vuốt cong) để đưa bóng vòng qua hàng rào!";
+            } else {
+                document.getElementById('tip-text').innerText = "Sút phạt đền! Vuốt hiểm hóc để hạ gục thủ môn!";
+            }
+        }, 2500);
+    }
+
+    function setupDefensiveWall() {
+        wallDefenders = [];
+        const wallCount = 4; // 4 defenders stand side-by-side
+        const wallZ = 200; // positioned halfway
+        const centerX = canvas.width / 2;
+        const spacing = 32;
+
+        for (let i = 0; i < wallCount; i++) {
+            const offset = (i - (wallCount - 1) / 2) * spacing;
+            wallDefenders.push({
+                x: centerX + offset + (Math.random() - 0.5) * 10,
+                baseY: goal.y + goal.h + 20,
+                y: goal.y + goal.h + 20,
+                z: wallZ,
+                width: 25,
+                height: 75,
+                jumpOffset: 0
+            });
+        }
+    }
+
+    // Frame update physics loop
+    function updatePhysics() {
+        // DRIBBLE RUN PHASE GAMEPLAY LOOP
+        if (gameState === 'DRIBBLE_RUN') {
+            fieldScrollY += dribbler.speed;
+            dribblingProgress += 0.15; // Slow incremental progress up the pitch
+
+            // Smoothly move player towards target input position
+            dribbler.x += (dribbler.targetX - dribbler.x) * 0.15;
+
+            // Constrain player within field boundary
+            dribbler.x = Math.max(canvas.width * 0.15, Math.min(canvas.width * 0.85, dribbler.x));
+
+            // Randomly spawn tackle defenders descending down the pitch
+            const now = Date.now();
+            let spawnCooldown = 1200;
+            if (currentDifficulty === 'EASY') spawnCooldown = 1800;
+            if (currentDifficulty === 'HARD') spawnCooldown = 800;
+
+            if (now - lastTacklerSpawnTime > spawnCooldown) {
+                defensiveTacklers.push({
+                    x: canvas.width * 0.2 + Math.random() * (canvas.width * 0.6),
+                    y: -50,
+                    width: 32,
+                    height: 64,
+                    speed: 4 + Math.random() * 4,
+                    slideTimer: 0,
+                    isSliding: false
+                });
+                lastTacklerSpawnTime = now;
+            }
+
+            // Update spawned defenders
+            defensiveTacklers.forEach(t => {
+                t.y += t.speed;
+
+                // Defender triggers slide tackle when close enough to dribbler
+                const distToDribblerY = (canvas.height * 0.75) - t.y;
+                if (distToDribblerY < 180 && distToDribblerY > 0 && !t.isSliding) {
+                    t.isSliding = true;
+                }
+
+                if (t.isSliding) {
+                    t.slideTimer += 0.05;
+                }
+            });
+
+            // Keep only active defenders on screen
+            defensiveTacklers = defensiveTacklers.filter(t => t.y < canvas.height + 50);
+
+            // Check if player runs into a Slide tackle to trigger FOUL!
+            for (let i = 0; i < defensiveTacklers.length; i++) {
+                const t = defensiveTacklers[i];
+                const distanceX = Math.abs(dribbler.x - t.x);
+                const distanceY = Math.abs((canvas.height * 0.75) - t.y);
+
+                // Tackle collision box
+                if (distanceX < 35 && distanceY < 40) {
+                    triggerFoul(dribblingProgress);
+                    break;
+                }
+            }
+
+            // If player completes the whole run without getting tackled, 
+            // trigger an automatic safe foul near penalty area!
+            if (dribblingProgress >= 100) {
+                triggerFoul(80); // guaranteed penalty in the box
+            }
+        }
+
+        // KICKING PHASE PHYSICS LOOP
+        if (gameState === 'KICKING') {
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+            ball.z += ball.vz;
+
+            ball.vx += ball.spin * 0.25;
+            ball.vy += 0.12; 
+
+            ball.radius = Math.max(6, 16 - (ball.z / 35));
+
+            // Goalkeeper moves towards jump target
+            if (goalie.isDiving) {
+                let moveFactor = 0.15;
+                if (currentDifficulty === 'EASY') moveFactor = 0.08;
+                if (currentDifficulty === 'HARD') moveFactor = 0.22;
+                
+                goalie.x += (goalie.targetX - goalie.x) * moveFactor;
+                goalie.y += (goalie.targetY - goalie.y) * moveFactor;
+            }
+
+            // Animate jumping defensive wall
+            if (isFreeKick && wallJumping) {
+                wallJumpTimer += 0.08;
+                const jumpHeight = 35; // Pixels defenders jump
+                const offset = Math.sin(wallJumpTimer) * jumpHeight;
+                
+                if (offset < 0) {
+                    wallJumping = false;
+                    wallDefenders.forEach(d => d.jumpOffset = 0);
+                } else {
+                    wallDefenders.forEach(d => d.jumpOffset = offset);
+                }
+            }
+
+            // Collision check: Defensive Wall blocks ball midway
+            if (isFreeKick && ball.z > 170 && ball.z < 230) {
+                for (let i = 0; i < wallDefenders.length; i++) {
+                    const d = wallDefenders[i];
+                    const distToDefX = Math.abs(ball.x - d.x);
+                    
+                    // Projected ball Y at wall depth
+                    const defenderTop = d.baseY - d.jumpOffset - d.height;
+                    const defenderBottom = d.baseY - d.jumpOffset;
+
+                    if (distToDefX < d.width && ball.y >= defenderTop && ball.y <= defenderBottom) {
+                        // Collided with wall! Deflect trajectory away
+                        ball.vx = (Math.random() - 0.5) * 6;
+                        ball.vy = -Math.abs(ball.vy) * 0.4;
+                        ball.vz = -ball.vz * 0.2;
+                        playSound('post');
+                        gameState = 'OUT';
+                        misses++;
+                        showFeedback("TRÚNG HÀNG RÀO!", "#da251d");
+                        triggerNextTurn();
+                        break;
+                    }
+                }
+            }
+
+            if (ball.z >= 420) {
+                gameState = 'RESULT';
+                checkResult();
+            }
+        }
+
+        // Animate celebratory confetti
+        if (confettiParticles.length > 0) {
+            confettiParticles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.rotation += p.rotationSpeed;
+            });
+            confettiParticles = confettiParticles.filter(p => p.y < canvas.height);
+        }
+    }
+
+    function triggerNextTurn() {
+        updateScoresUI();
+        setTimeout(() => {
+            if (currentGameMode === 'TOURNAMENT') {
+                if (shootoutTurn % 2 === 1) {
+                    triggerAIShooter();
+                } else {
+                    currentSelectedId = Math.floor(Math.random() * 10) + 1; 
+                    updateSelectedPlayerUI();
+                    startDribbleRun();
+                }
+            } else {
+                if (currentGameMode === 'GK') {
+                    triggerAIShooter();
+                } else {
+                    startDribbleRun();
+                }
+            }
+        }, 2500);
+    }
+
+    // Main Canvas Drawing Loop
+    function renderArena() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // STADIUM STAGE RENDERERS
+        if (gameState !== 'DRIBBLE_RUN') {
+            const horizon = goal.y + goal.h;
+            
+            // Sky Gradient
+            const skyGrad = ctx.createLinearGradient(0, 0, 0, horizon);
+            skyGrad.addColorStop(0, '#040d06');
+            skyGrad.addColorStop(1, '#0e2413');
+            ctx.fillStyle = skyGrad;
+            ctx.fillRect(0, 0, canvas.width, horizon);
+
+            // Grass Pattern
+            const grassGrad = ctx.createLinearGradient(0, horizon, 0, canvas.height);
+            grassGrad.addColorStop(0, '#103014');
+            grassGrad.addColorStop(1, '#061608');
+            ctx.fillStyle = grassGrad;
+            ctx.fillRect(0, horizon, canvas.width, canvas.height - horizon);
+
+            // Lines
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(goal.x - 100, goal.y + goal.h);
+            ctx.lineTo(goal.x + goal.w + 100, goal.y + goal.h);
+            ctx.stroke();
+
+            // Circle
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height * 0.82, 110, Math.PI, 0);
+            ctx.stroke();
+
+            // Goal Net
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.lineWidth = 1;
+            for (let i = goal.x; i <= goal.x + goal.w; i += 22) {
+                ctx.beginPath();
+                ctx.moveTo(i, goal.y);
+                ctx.lineTo(i + (i - canvas.width / 2) * 0.08, goal.y + goal.h);
+                ctx.stroke();
+            }
+            for (let j = goal.y; j <= goal.y + goal.h; j += 18) {
+                ctx.beginPath();
+                ctx.moveTo(goal.x, j);
+                ctx.lineTo(goal.x + goal.w, j);
+                ctx.stroke();
+            }
+
+            // Goal Posts
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#ffffff';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = 'rgba(255,255,255,0.3)';
+            ctx.lineWidth = 12;
+            ctx.beginPath();
+            ctx.moveTo(goal.x, goal.y + goal.h);
+            ctx.lineTo(goal.x, goal.y);
+            ctx.lineTo(goal.x + goal.w, goal.y);
+            ctx.lineTo(goal.x + goal.w, goal.y + goal.h);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // Draw Goalkeeper
+            drawGoalkeeper();
+
+            // Draw Defensive Wall
+            if (isFreeKick) {
+                drawDefensiveWall();
+            }
+
+            // Draw Ball and Shadow
+            if (gameState !== 'MENU' && gameState !== 'KICK_TRANSITION') {
+                ctx.fillStyle = 'rgba(0,0,0,0.4)';
+                ctx.beginPath();
+                const shadowX = ball.x + (ball.x - canvas.width / 2) * (ball.z / 400);
+                const shadowY = Math.max(goal.y + goal.h, canvas.height * 0.85);
+                const shadowRadius = ball.radius * (1 - ball.z / 600);
+                ctx.ellipse(shadowX, shadowY, shadowRadius * 1.5, shadowRadius * 0.5, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                ctx.strokeStyle = '#222222';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = '#da251d';
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Swipe Guide lines
+            const isUserGK = (currentGameMode === 'GK') || (currentGameMode === 'TOURNAMENT' && shootoutTurn % 2 === 1);
+            if (isDrawingSwipe && touchPoints.length > 1 && !isUserGK) {
+                ctx.strokeStyle = 'rgba(255, 215, 0, 0.8)';
+                ctx.lineWidth = 4;
+                ctx.lineJoin = 'round';
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = '#ffd700';
+                ctx.beginPath();
+                ctx.moveTo(touchPoints[0].x, touchPoints[0].y);
+                for (let k = 1; k < touchPoints.length; k++) {
+                    ctx.lineTo(touchPoints[k].x, touchPoints[k].y);
+                }
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+
+                const last = touchPoints[touchPoints.length - 1];
+                ctx.fillStyle = '#ffd700';
+                ctx.beginPath();
+                ctx.arc(last.x, last.y, 8, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Draw Confetti
+            if (confettiParticles.length > 0) {
+                confettiParticles.forEach(p => {
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                    ctx.restore();
+                });
+            }
+        } 
+        
+        // DRIBBLING / ATTACK RUNNING STAGE RENDERER
+        else {
+            drawDribblingStage();
+        }
+    }
+
+    function drawDribblingStage() {
+        // Scrolling pitch grass bars
+        const stripeHeight = 100;
+        const offset = fieldScrollY % (stripeHeight * 2);
+
+        for (let y = -stripeHeight * 2; y < canvas.height + stripeHeight; y += stripeHeight) {
+            const index = Math.floor((y - fieldScrollY) / stripeHeight);
+            ctx.fillStyle = index % 2 === 0 ? '#103014' : '#0d2610';
+            ctx.fillRect(0, y + offset, canvas.width, stripeHeight);
+        }
+
+        // Draw Touch Boundary Lines
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(canvas.width * 0.15, 0);
+        ctx.lineTo(canvas.width * 0.15, canvas.height);
+        ctx.moveTo(canvas.width * 0.85, 0);
+        ctx.lineTo(canvas.width * 0.85, canvas.height);
+        ctx.stroke();
+
+        // Goal box visual coming up in the distance (as progress reaches 80%+)
+        if (dribblingProgress > 50) {
+            const progressY = canvas.height * 0.15 - (100 - dribblingProgress) * 5;
+            ctx.fillStyle = 'rgba(255,255,255,0.05)';
+            ctx.fillRect(canvas.width * 0.25, progressY, canvas.width * 0.5, 200);
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.strokeRect(canvas.width * 0.25, progressY, canvas.width * 0.5, 200);
+        }
+
+        // Draw Player (Dribbler)
+        const px = dribbler.x;
+        const py = canvas.height * 0.75;
+        
+        // Draw dribbler body (Vietnam red jersey)
+        ctx.fillStyle = '#da251d';
+        ctx.fillRect(px - 14, py - 30, 28, 40);
+        // Head
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(px, py - 40, 10, 0, Math.PI * 2);
+        ctx.fill();
+        // Hair
+        ctx.fillStyle = '#000000';
+        ctx.beginPath();
+        ctx.arc(px, py - 44, 10, Math.PI, 0);
+        ctx.fill();
+
+        // Draw dribbling Ball right in front of the player
+        const ballOffset = Math.sin(Date.now() / 80) * 5;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(px + ballOffset, py + 25, 9, 0, Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle = '#222';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Draw opponent defenders charging down
+        defensiveTacklers.forEach(t => {
+            // Draw Blue Jersey
+            ctx.fillStyle = '#1d4ed8'; // Blue kit
+            ctx.fillRect(t.x - 14, t.y - 30, 28, 40);
+            
+            // Head
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath();
+            ctx.arc(t.x, t.y - 40, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Slide tackle visual
+            if (t.isSliding) {
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 4;
+                ctx.strokeRect(t.x - 22, t.y, 44, 20);
+                
+                // Tackle dust
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.beginPath();
+                ctx.arc(t.x + (Math.random() - 0.5)*30, t.y + 20, 15, 0, Math.PI*2);
+                ctx.fill();
+            }
+        });
+
+        // Top progress bar showing run completion
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(canvas.width * 0.2, 70, canvas.width * 0.6, 12);
+        ctx.fillStyle = '#eab308'; // Gold progress
+        ctx.fillRect(canvas.width * 0.2, 70, canvas.width * 0.6 * (dribblingProgress / 100), 12);
+
+        // UI text elements
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 24px Montserrat';
+        ctx.textAlign = 'center';
+        ctx.fillText("PHÁ TẤN CÔNG NHANH!", canvas.width / 2, 50);
+
+        ctx.font = '600 14px Montserrat';
+        ctx.fillStyle = '#fef08a';
+        ctx.fillText(dribbleStatusText, canvas.width / 2, 105);
+    }
+
+    function drawDefensiveWall() {
+        wallDefenders.forEach(d => {
+            const dy = d.baseY - d.jumpOffset;
+            
+            ctx.save();
+            // Opponent defensive wall (e.g., navy blue jerseys)
+            ctx.fillStyle = '#1e3a8a';
+            ctx.fillRect(d.x - d.width/2, dy - d.height, d.width, d.height);
+
+            // Shorts
+            ctx.fillStyle = '#1e2937';
+            ctx.fillRect(d.x - d.width/2, dy - 20, d.width, 10);
+
+            // Legs
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(d.x - d.width/4, dy - 10, d.width/4, 10);
+            ctx.fillRect(d.x + d.width/8, dy - 10, d.width/4, 10);
+
+            // Heads
+            ctx.beginPath();
+            ctx.arc(d.x, dy - d.height - 8, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Crossed hands blocking pose
+            ctx.strokeStyle = '#1e3a8a';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(d.x - d.width/2 - 2, dy - d.height + 25);
+            ctx.lineTo(d.x + d.width/2 + 2, dy - d.height + 25);
+            ctx.stroke();
+
+            ctx.restore();
+        });
+    }
+
+    function drawGoalkeeper() {
+        const x = goalie.x;
+        const y = goalie.y;
+        
+        ctx.save();
+        
+        const isUserGK = (currentGameMode === 'GK') || (currentGameMode === 'TOURNAMENT' && shootoutTurn % 2 === 1);
+        
+        if (isUserGK) {
+            ctx.fillStyle = '#eab308'; // Bùi Tấn Trường Yellow Kit
+        } else {
+            if (currentGameMode === 'TOURNAMENT') {
+                if (currentTournamentRound === 1) ctx.fillStyle = '#ef4444'; 
+                else if (currentTournamentRound === 2) ctx.fillStyle = '#3b82f6'; 
+                else ctx.fillStyle = '#1e3a8a'; 
+            } else {
+                ctx.fillStyle = '#22c55e'; 
+            }
+        }
+
+        // Body
+        ctx.fillRect(x - 18, y - 75, 36, 50);
+
+        // Pants
+        ctx.fillStyle = isUserGK ? '#ca8a04' : '#1f2937';
+        ctx.fillRect(x - 18, y - 25, 36, 15);
+
+        // Legs
+        ctx.fillStyle = '#111111';
+        ctx.fillRect(x - 14, y - 10, 8, 10);
+        ctx.fillRect(x + 6, y - 10, 8, 10);
+
+        // Jersey Number
+        ctx.fillStyle = isUserGK ? '#da251d' : '#ffffff';
+        ctx.font = 'bold 16px Montserrat';
+        ctx.textAlign = 'center';
+        ctx.fillText('1', x, y - 45);
+
+        // Head & Hair
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(x, y - 85, 12, 0, Math.PI*2);
+        ctx.fill();
+
+        ctx.fillStyle = '#000000';
+        ctx.beginPath();
+        ctx.arc(x, y - 91, 12, Math.PI, 0);
+        ctx.fill();
+
+        // Hands
+        ctx.strokeStyle = isUserGK ? '#eab308' : '#22c55e';
+        ctx.lineWidth = 10;
+        ctx.lineCap = 'round';
+
+        if (goalie.isDiving) {
+            ctx.beginPath();
+            ctx.moveTo(x - 15, y - 65);
+            ctx.lineTo(x - 45, y - 90);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(x + 15, y - 65);
+            ctx.lineTo(x + 45, y - 90);
+            ctx.stroke();
+
+            ctx.fillStyle = '#da251d';
+            ctx.beginPath();
+            ctx.arc(x - 45, y - 90, 8, 0, Math.PI*2);
+            ctx.arc(x + 45, y - 90, 8, 0, Math.PI*2);
+            ctx.fill();
+        } else {
+            ctx.beginPath();
+            ctx.moveTo(x - 15, y - 65);
+            ctx.lineTo(x - 38, y - 55);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(x + 15, y - 65);
+            ctx.lineTo(x + 38, y - 55);
+            ctx.stroke();
+
+            ctx.fillStyle = '#da251d';
+            ctx.beginPath();
+            ctx.arc(x - 38, y - 55, 8, 0, Math.PI*2);
+            ctx.arc(x + 38, y - 55, 8, 0, Math.PI*2);
+            ctx.fill();
+        }
+
+        ctx.restore();
+    }
+
+    function gameLoop() {
+        updatePhysics();
+        renderArena();
+        gameLoopId = requestAnimationFrame(gameLoop);
+    }
+
+    window.onload = () => {
+        init();
+        gameLoop();
+    };
+
+</script>
+</body>
+</html>
