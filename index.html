@@ -3,65 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FC Mobile VN - Đội Hình Đỉnh Cao</title>
+    <title>FC Mobile VN - Siêu Phẩm Đỉnh Cao</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
 
         body {
             font-family: 'Montserrat', sans-serif;
             margin: 0;
             overflow: hidden;
-            background: #0d0d11;
+            background: #09090d;
             color: white;
             touch-action: none;
             user-select: none;
         }
 
-        /* Gold premium gradient background */
+        /* Gold premium background */
         .fc-bg {
-            background: radial-gradient(circle at center, #1e3c1a 0%, #0a140a 100%);
+            background: radial-gradient(circle at center, #111a2e 0%, #05070f 100%);
         }
 
-        /* Beautiful FC Card style mimicking the uploaded image */
-        .fc-card {
-            background: linear-gradient(135deg, #7a1515 0%, #3a0505 50%, #150000 100%);
-            border: 2px solid #ffd700;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3), inset 0 0 10px rgba(255, 215, 0, 0.2);
+        /* Premium Football Card Designs mimicking various event templates in the screenshot */
+        .fc-card-premium {
+            background: linear-gradient(135deg, #1c2b54 0%, #0d1329 50%, #03050d 100%);
+            border: 2px solid #00f0ff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(0, 240, 255, 0.15);
             position: relative;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            aspect-ratio: 1 / 1.35;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            aspect-ratio: 1 / 1.38;
         }
 
-        .fc-card:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
-            z-index: 50;
+        .fc-card-tots {
+            background: linear-gradient(135deg, #443217 0%, #1e1509 50%, #0d0803 100%);
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3), inset 0 0 10px rgba(255, 215, 0, 0.15);
+            position: relative;
+            transition: all 0.2s;
+            aspect-ratio: 1 / 1.38;
         }
 
-        .fc-card.selected {
-            border: 3px solid #ff4d4d;
-            box-shadow: 0 0 25px #ff4d4d;
+        .fc-card-welcome {
+            background: linear-gradient(135deg, #4b1161 0%, #20042d 50%, #0d0117 100%);
+            border: 2px solid #e024fc;
+            box-shadow: 0 0 15px rgba(224, 36, 252, 0.3), inset 0 0 10px rgba(224, 36, 252, 0.15);
+            position: relative;
+            transition: all 0.2s;
+            aspect-ratio: 1 / 1.38;
         }
 
-        /* Glowing text effect */
-        .glow-text {
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(218, 37, 29, 0.5);
+        .fc-card-flag {
+            background: linear-gradient(135deg, #0e3020 0%, #05140f 50%, #010807 100%);
+            border: 2px solid #10b981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3), inset 0 0 10px rgba(16, 185, 129, 0.15);
+            position: relative;
+            transition: all 0.2s;
+            aspect-ratio: 1 / 1.38;
         }
 
+        .fc-card-premium:hover, .fc-card-tots:hover, .fc-card-welcome:hover, .fc-card-flag:hover {
+            transform: translateY(-5px) scale(1.04);
+            z-index: 10;
+        }
+
+        .fc-card-premium.selected, .fc-card-tots.selected, .fc-card-welcome.selected, .fc-card-flag.selected {
+            border: 3px solid #00ffcc;
+            box-shadow: 0 0 25px #00ffcc;
+        }
+
+        /* Gold shining star text */
         .gold-glow {
             text-shadow: 0 0 8px rgba(255, 215, 0, 0.9);
         }
 
-        /* Tactical Board style layout */
         .tactical-board {
             background-image: 
-                radial-gradient(circle at 50% 100%, transparent 60%, rgba(255,255,255,0.05) 60%),
-                linear-gradient(rgba(255,255,255,0.05) 2px, transparent 2px),
-                linear-gradient(90deg, rgba(255,255,255,0.05) 2px, transparent 2px);
-            background-size: 100% 100%, 40px 40px, 40px 40px;
-            border: 2px solid rgba(255,255,255,0.1);
+                radial-gradient(circle at 50% 100%, transparent 60%, rgba(255,255,255,0.03) 60%),
+                linear-gradient(rgba(255,255,255,0.02) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 2px, transparent 2px);
+            background-size: 100% 100%, 35px 35px, 35px 35px;
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 16px;
+        }
+
+        /* Pack opening glowing card reveal */
+        @keyframes packGlow {
+            0% { transform: scale(0.9) rotate(0deg); filter: brightness(1); }
+            50% { transform: scale(1.05) rotate(180deg); filter: brightness(1.8) drop-shadow(0 0 40px #ffd700); }
+            100% { transform: scale(1) rotate(360deg); filter: brightness(1.2); }
+        }
+
+        .pack-glow-animation {
+            animation: packGlow 1.8s ease-out forwards;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
@@ -69,9 +109,514 @@
 
 <div id="game-container" class="relative w-screen h-screen flex flex-col justify-between overflow-hidden">
     
-    <!-- UI Top: Scoreboard during gameplay -->
-    <div id="gameplay-hud" class="hidden absolute top-4 left-0 w-full px-6 flex justify-between items-center z-40 pointer-events-none">
-        <div class="bg-black/80 backdrop-blur-md px-4 py-2 rounded-xl border-l-4 border-red-600 shadow-lg pointer-events-auto">
+    <!-- TOP NAVBAR (Khớp 100% với bức ảnh chụp của bạn) -->
+    <div id="top-navbar" class="absolute top-0 left-0 w-full px-6 py-2.5 bg-gradient-to-b from-black/80 to-black/20 backdrop-blur-md border-b border-white/5 flex justify-between items-center z-50">
+        
+        <!-- Left: Profile and Level -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-blue-900 border border-yellow-500/50 flex items-center justify-center font-black text-sm text-yellow-400">
+                VN
+            </div>
+            <div>
+                <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-black text-white tracking-wide">junegeniequan</span>
+                    <span class="bg-yellow-500 text-black font-black text-[9px] px-1 rounded">TIN TỨC</span>
+                </div>
+                <div class="flex items-center gap-1 mt-0.5">
+                    <span class="bg-green-600 text-white font-black text-[9px] px-1.5 py-0.5 rounded">31</span>
+                    <div class="w-24 bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-green-400 h-full" style="width: 18.4%"></div>
+                    </div>
+                    <span class="text-[8px] font-bold text-gray-400">442/2400XP</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right: Currencies and Quick Icons -->
+        <div class="flex items-center gap-4">
+            <!-- Coins -->
+            <div class="bg-black/50 px-2.5 py-1.5 rounded-lg border border-white/10 flex items-center gap-1.5">
+                <span class="text-yellow-500 font-black text-[10px]">🪙</span>
+                <span id="global-coins" class="font-extrabold text-xs text-yellow-400">33,840,165</span>
+                <span class="text-gray-500 text-[10px] font-black pointer-events-auto cursor-pointer" onclick="claimBonusCoins()">+</span>
+            </div>
+            <!-- Gems -->
+            <div class="bg-black/50 px-2.5 py-1.5 rounded-lg border border-white/10 flex items-center gap-1.5">
+                <span class="text-red-500 font-black text-[10px]">♦</span>
+                <span id="global-gems" class="font-extrabold text-xs text-red-400">3,796</span>
+                <span class="text-gray-500 text-[10px] font-black">+</span>
+            </div>
+            <!-- FC Points -->
+            <div class="bg-black/50 px-2.5 py-1.5 rounded-lg border border-white/10 flex items-center gap-1.5">
+                <span class="text-green-400 font-black text-[10px]">🟢</span>
+                <span class="font-extrabold text-xs text-green-400">0</span>
+                <span class="text-gray-500 text-[10px] font-black">+</span>
+            </div>
+
+            <!-- Profile/Settings Icons -->
+            <div class="flex items-center gap-2.5 border-l border-white/10 pl-3">
+                <button class="text-gray-400 hover:text-white transition-all text-sm">👥</button>
+                <button class="text-gray-400 hover:text-white transition-all text-sm">✉</button>
+                <button class="text-gray-400 hover:text-white transition-all text-sm">⚙</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN INTERACTIVE SCREENS -->
+    <div id="main-content" class="absolute inset-x-0 bottom-[64px] top-[56px] z-40 overflow-y-auto">
+        
+        <!-- 1. HOME SCREEN (Trang Chủ) -->
+        <div id="screen-home" class="p-4 md:p-6 flex flex-col justify-between h-full">
+            
+            <div class="grid grid-cols-12 gap-4 items-stretch flex-grow mt-2">
+                <!-- Left Vertical Banners -->
+                <div class="col-span-2 flex flex-col gap-3 justify-center">
+                    <button class="bg-blue-950/40 hover:bg-blue-900/60 border border-white/10 rounded-xl p-2.5 text-center transition-all flex flex-col items-center">
+                        <span class="text-lg">⚽</span>
+                        <span class="text-[9px] font-black text-gray-300 mt-1 uppercase tracking-tight">Hoạt Động</span>
+                    </button>
+                    <button class="bg-blue-950/40 hover:bg-blue-900/60 border border-white/10 rounded-xl p-2.5 text-center transition-all flex flex-col items-center">
+                        <span class="text-lg">🏷</span>
+                        <span class="text-[9px] font-black text-gray-300 mt-1 uppercase tracking-tight">Nổi Bật</span>
+                    </button>
+                    <button class="bg-blue-950/40 hover:bg-blue-900/60 border border-white/10 rounded-xl p-2.5 text-center transition-all flex flex-col items-center">
+                        <span class="text-lg">⭐</span>
+                        <span class="text-[9px] font-black text-gray-300 mt-1 uppercase tracking-tight">Sổ Siêu Sao</span>
+                    </button>
+                    <button class="bg-blue-950/40 hover:bg-blue-900/60 border border-white/10 rounded-xl p-2.5 text-center transition-all flex flex-col items-center">
+                        <span class="text-lg">🏟</span>
+                        <span class="text-[9px] font-black text-gray-300 mt-1 uppercase tracking-tight">Khu Phức Hợp</span>
+                    </button>
+                </div>
+
+                <!-- Center Large Banner Carousel (Vietnam All Star & Record Holders) -->
+                <div class="col-span-6 bg-gradient-to-tr from-red-950/80 to-[#101b3b] rounded-2xl border border-red-500/20 p-6 flex flex-col justify-between relative overflow-hidden shadow-2xl">
+                    <div class="absolute right-0 top-0 bottom-0 w-1/2 opacity-35 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-yellow-500/20 via-transparent to-transparent pointer-events-none"></div>
+                    <div>
+                        <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded-full font-black uppercase tracking-widest">RECORD HOLDERS</span>
+                        <h2 class="text-3xl md:text-5xl font-black mt-3 text-white tracking-tighter leading-none">VIETNAM<br><span class="text-yellow-400 glow-text">ALL STAR</span></h2>
+                        <p class="text-xs text-gray-300 mt-2 max-w-xs">Chiêu mộ các siêu sao bóng đá Việt Nam và thách thức mọi giải đấu!</p>
+                    </div>
+
+                    <div class="z-10 mt-6">
+                        <button onclick="changeMenuTab('PLAY')" class="bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-black py-3 px-8 rounded-xl uppercase tracking-wider text-xs md:text-sm shadow-lg shadow-yellow-500/20 hover:scale-105 active:scale-95 transition-all">
+                            Chơi Ngay ➔
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Club & Play Cards -->
+                <div class="col-span-4 flex flex-col gap-4">
+                    <!-- Club Status -->
+                    <div onclick="changeMenuTab('SQUAD')" class="flex-1 bg-gradient-to-r from-[#17203b] to-black border border-white/10 rounded-2xl p-4 flex justify-between items-center cursor-pointer hover:border-yellow-500/30 transition-all">
+                        <div>
+                            <span class="text-[10px] text-yellow-500 font-black uppercase tracking-wider">CÂU LẠC BỘ</span>
+                            <div class="text-xs text-gray-400 mt-1">4-3-3 Tấn Công</div>
+                            <div class="text-lg font-black text-white mt-1">OVR <span class="text-yellow-400">120</span></div>
+                        </div>
+                        <div class="w-12 h-12 bg-white/5 rounded-full border border-yellow-500/20 flex items-center justify-center font-bold text-sm text-yellow-400 shadow">
+                            🛡
+                        </div>
+                    </div>
+                    
+                    <!-- Play Hub Action -->
+                    <div onclick="changeMenuTab('PLAY')" class="flex-1 bg-gradient-to-r from-[#1e4620] to-black border border-white/10 rounded-2xl p-4 flex justify-between items-center cursor-pointer hover:border-green-500/30 transition-all">
+                        <div>
+                            <span class="text-[10px] text-green-400 font-black uppercase tracking-wider">SÂN ĐẤU</span>
+                            <div class="text-xs text-gray-400 mt-1">Xếp Hạng & AI</div>
+                            <div class="text-lg font-black text-white mt-1">CHƠI ⚽</div>
+                        </div>
+                        <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center font-black text-lg shadow-lg animate-pulse">
+                            ➔
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 2. SQUAD MANAGEMENT (🛡 Đội Hình - Tái hiện chuẩn sơ đồ 4-3-3 từ hình chụp) -->
+        <div id="screen-squad" class="hidden p-4 md:p-6 flex-col justify-between h-full">
+            <div class="grid grid-cols-12 gap-5 items-stretch flex-grow">
+                
+                <!-- 4-3-3 Football Pitch representation matching Screenshot 6 -->
+                <div class="col-span-8 tactical-board p-4 flex flex-col justify-between relative min-h-[420px]">
+                    <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 border-t border-dashed border-white/10 pointer-events-none"></div>
+                    <div class="absolute top-4 left-1/2 -translate-x-1/2 w-40 h-20 border border-white/5 rounded-b-3xl pointer-events-none"></div>
+                    
+                    <!-- Forwards (LW, ST, RW) -->
+                    <div class="flex justify-around items-center z-10">
+                        <div id="slot-1" class="w-[18%] max-w-[80px]" onclick="selectLineupSlot(1)"></div>
+                        <div id="slot-2" class="w-[18%] max-w-[80px]" onclick="selectLineupSlot(2)"></div>
+                        <div id="slot-3" class="w-[18%] max-w-[80px]" onclick="selectLineupSlot(3)"></div>
+                    </div>
+
+                    <!-- Midfielders (CM, CAM, CM) -->
+                    <div class="flex justify-around items-center z-10 my-2">
+                        <div id="slot-4" class="w-[18%] max-w-[80px]" onclick="selectLineupSlot(4)"></div>
+                        <div id="slot-5" class="w-[18%] max-w-[80px]" onclick="selectLineupSlot(5)"></div>
+                        <div id="slot-6" class="w-[18%] max-w-[80px]" onclick="selectLineupSlot(6)"></div>
+                    </div>
+
+                    <!-- Defenders (LB, CB, CB, RB) -->
+                    <div class="flex justify-around items-center z-10">
+                        <div id="slot-7" class="w-[16%] max-w-[70px]" onclick="selectLineupSlot(7)"></div>
+                        <div id="slot-8" class="w-[16%] max-w-[70px]" onclick="selectLineupSlot(8)"></div>
+                        <div id="slot-9" class="w-[16%] max-w-[70px]" onclick="selectLineupSlot(9)"></div>
+                        <div id="slot-10" class="w-[16%] max-w-[70px]" onclick="selectLineupSlot(10)"></div>
+                    </div>
+
+                    <!-- Goalkeeper -->
+                    <div class="flex justify-center items-center z-10">
+                        <div id="slot-11" class="w-[18%] max-w-[80px]" onclick="selectLineupSlot(11)"></div>
+                    </div>
+                </div>
+
+                <!-- Squad values and Substitutes swapping -->
+                <div class="col-span-4 bg-black/60 border border-white/10 rounded-2xl p-5 flex flex-col justify-between">
+                    <div>
+                        <!-- Squad Stats Header matching image -->
+                        <div class="flex justify-between items-center border-b border-white/5 pb-3 mb-4">
+                            <div>
+                                <span class="text-xs font-black text-yellow-500">MY TEAM OVR</span>
+                                <div class="text-3xl font-black text-white mt-1">120</div>
+                                <div class="text-[9px] text-gray-400 mt-0.5">4-3-3 Tấn Công</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-[9px] text-gray-400">GIÁ TRỊ ĐỘI HÌNH</div>
+                                <div class="text-xs font-black text-yellow-400 mt-1">🪙 50.284.000.000</div>
+                            </div>
+                        </div>
+
+                        <h3 class="text-[10px] font-black text-yellow-500 uppercase tracking-widest mb-2.5 text-center">🛡 Dự bị & Kho Cầu Thủ 🛡</h3>
+                        <div id="inventory-list" class="grid grid-cols-3 gap-2 overflow-y-auto max-h-[220px] p-1 hide-scrollbar">
+                            <!-- Dynamic substitutes inventory cards will display here -->
+                        </div>
+                    </div>
+                    <div class="mt-4 border-t border-white/5 pt-3">
+                        <div class="flex gap-2">
+                            <button onclick="autoOptimizeSquad()" class="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 py-2 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all">Tự động tối ưu</button>
+                            <button onclick="changeMenuTab('UPGRADE')" class="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black py-2 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all">Chỉnh sửa đội hình</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. PLAY GAMEPLAY HUB (Chơi) -->
+        <div id="screen-play" class="hidden p-4 md:p-6 flex-col justify-between h-full">
+            <div class="grid grid-cols-12 gap-5 items-stretch flex-grow">
+                <!-- Campaigns List -->
+                <div class="col-span-8 bg-black/40 border border-white/10 rounded-2xl p-5 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-black text-yellow-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                            🏆 Chế Độ Đấu Giải Đỉnh Cao (World Championship)
+                        </h3>
+                        <div class="space-y-3">
+                            <div id="t-round-1" class="flex justify-between items-center p-3.5 rounded-xl bg-white/5 border border-white/10">
+                                <div>
+                                    <span class="font-bold text-sm block">Vòng Tứ Kết: vs Indonesia 🇮🇩</span>
+                                    <span class="text-[10px] text-gray-400">Thủ môn OVR 112 | Thách thức dễ thở</span>
+                                </div>
+                                <span class="text-xs font-black text-yellow-500" id="t-status-1">SẴN SÀNG</span>
+                            </div>
+                            <div id="t-round-2" class="flex justify-between items-center p-3.5 rounded-xl bg-black/20 text-gray-500 border border-transparent">
+                                <div>
+                                    <span class="font-bold text-sm block">Vòng Bán Kết: vs Thái Lan 🇹🇭</span>
+                                    <span class="text-[10px] text-gray-500">Thủ môn OVR 116 | Phản xạ nhanh</span>
+                                </div>
+                                <span class="text-xs font-bold" id="t-status-2">CHƯA MỞ</span>
+                            </div>
+                            <div id="t-round-3" class="flex justify-between items-center p-3.5 rounded-xl bg-black/20 text-gray-500 border border-transparent">
+                                <div>
+                                    <span class="font-bold text-sm block">Vòng Chung Kết: vs Nhật Bản 🇯🇵</span>
+                                    <span class="text-[10px] text-gray-500">Thủ môn OVR 120 | Phản xạ huyền thoại</span>
+                                </div>
+                                <span class="text-xs font-bold" id="t-status-3">KHOÁ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="launchMatch()" class="w-full mt-6 bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-black py-4 px-6 rounded-xl uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all text-sm shadow-lg shadow-yellow-500/10">
+                        Ra Sân Ngay ➔
+                    </button>
+                </div>
+
+                <!-- Play Setup and Mode switcher -->
+                <div class="col-span-4 bg-black/60 border border-white/10 rounded-2xl p-5 flex flex-col justify-between text-center">
+                    <div>
+                        <h3 class="text-xs font-black text-yellow-400 uppercase tracking-widest mb-4">✪ Thiết lập trận đấu ✪</h3>
+                        
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/5 mb-4 text-left">
+                            <span class="text-xs font-bold text-gray-400 block mb-2">Độ Khó Trận Đấu</span>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="setDifficulty('EASY')" id="set-easy" class="py-2 rounded-lg text-xs font-bold bg-gray-800 text-gray-400">Gà Con 🐣</button>
+                                <button onclick="setDifficulty('NORMAL')" id="set-normal" class="py-2 rounded-lg text-xs font-bold bg-red-600 text-white">Thường ⚽</button>
+                                <button onclick="setDifficulty('HARD')" id="set-hard" class="py-2 rounded-lg text-xs font-bold bg-gray-800 text-gray-400">Huyền Thoại 👑</button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/5 text-left">
+                            <span class="text-xs font-bold text-gray-400 block mb-2">Lựa Chọn Chế Độ Chơi</span>
+                            <div class="space-y-2">
+                                <button onclick="changeMatchMode('TOURNAMENT')" id="play-mode-tournament" class="w-full py-2.5 rounded-lg text-xs font-black bg-yellow-600 text-white border border-yellow-400 flex justify-between px-4">
+                                    <span>🏆 GIẢI ĐẤU (SÚT & ĐỠ XOAY VÒNG)</span>
+                                    <span>KÍCH HOẠT</span>
+                                </button>
+                                <button onclick="changeMatchMode('SHOOT')" id="play-mode-shoot" class="w-full py-2.5 rounded-lg text-xs font-black bg-gray-800 text-gray-400 flex justify-between px-4">
+                                    <span>⚽ SÚT PHẠT ĐƠN LẺ</span>
+                                    <span></span>
+                                </button>
+                                <button onclick="changeMatchMode('GK')" id="play-mode-gk" class="w-full py-2.5 rounded-lg text-xs font-black bg-gray-800 text-gray-400 flex justify-between px-4">
+                                    <span>🧤 THỦ MÔN TẬP LUYỆN</span>
+                                    <span></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. STORE (Cửa Hàng Packs - Tái hiện từ hình ảnh 5) -->
+        <div id="screen-store" class="hidden p-4 md:p-6 flex-col justify-between h-full">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-stretch flex-grow">
+                <!-- Pack 1: Tây Ban Nha -->
+                <div class="bg-gradient-to-b from-[#181136] to-black border border-blue-500/30 rounded-2xl p-4 flex flex-col justify-between text-center">
+                    <div>
+                        <span class="text-[9px] bg-yellow-500 text-black px-2 py-0.5 rounded font-black uppercase">450% GIÁ TRỊ</span>
+                        <h3 class="text-xs font-black text-blue-300 uppercase mt-2">TWG SPAIN Bạc</h3>
+                        <div class="w-28 mx-auto aspect-[1/1.38] bg-gradient-to-tr from-[#9b152d] to-[#bf8b2a] rounded-xl flex items-center justify-center border border-white/10 shadow-lg relative overflow-hidden my-3">
+                            <div class="absolute inset-0 bg-black/20 flex flex-col justify-between p-2 text-left">
+                                <span class="text-[8px] font-black text-yellow-300">SPAIN</span>
+                                <span class="text-xl font-black text-center text-white">🇪🇸</span>
+                                <span class="text-[10px] font-extrabold text-white text-center block">117-119</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-xs font-extrabold text-red-400 mb-2">♦ 300 GEMS</div>
+                        <button onclick="buyPlayerPack('SPAIN')" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-2.5 rounded-xl text-[10px] uppercase tracking-wider transition-all">
+                            Mở Gói Quà
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pack 2: Pháp -->
+                <div class="bg-gradient-to-b from-[#181136] to-black border border-blue-500/30 rounded-2xl p-4 flex flex-col justify-between text-center">
+                    <div>
+                        <span class="text-[9px] bg-yellow-500 text-black px-2 py-0.5 rounded font-black uppercase">450% GIÁ TRỊ</span>
+                        <h3 class="text-xs font-black text-blue-300 uppercase mt-2">TWG FRANCE Đồng</h3>
+                        <div class="w-28 mx-auto aspect-[1/1.38] bg-gradient-to-tr from-[#152e61] to-[#bf2a42] rounded-xl flex items-center justify-center border border-white/10 shadow-lg relative overflow-hidden my-3">
+                            <div class="absolute inset-0 bg-black/20 flex flex-col justify-between p-2 text-left">
+                                <span class="text-[8px] font-black text-blue-300">FRANCE</span>
+                                <span class="text-xl font-black text-center text-white">🇫🇷</span>
+                                <span class="text-[10px] font-extrabold text-white text-center block">115-119</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-xs font-extrabold text-red-400 mb-2">♦ 100 GEMS</div>
+                        <button onclick="buyPlayerPack('FRANCE')" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-2.5 rounded-xl text-[10px] uppercase tracking-wider transition-all">
+                            Mở Gói Quà
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pack 3: Argentina -->
+                <div class="bg-gradient-to-b from-[#181136] to-black border border-blue-500/30 rounded-2xl p-4 flex flex-col justify-between text-center">
+                    <div>
+                        <span class="text-[9px] bg-yellow-500 text-black px-2 py-0.5 rounded font-black uppercase">450% GIÁ TRỊ</span>
+                        <h3 class="text-xs font-black text-blue-300 uppercase mt-2">TWG ARGENTINA Bạc</h3>
+                        <div class="w-28 mx-auto aspect-[1/1.38] bg-gradient-to-tr from-[#54a1d4] to-[#fcfcfc] rounded-xl flex items-center justify-center border border-white/10 shadow-lg relative overflow-hidden my-3">
+                            <div class="absolute inset-0 bg-black/20 flex flex-col justify-between p-2 text-left">
+                                <span class="text-[8px] font-black text-sky-300">ARGENTINA</span>
+                                <span class="text-xl font-black text-center text-white">🇦🇷</span>
+                                <span class="text-[10px] font-extrabold text-white text-center block">117-119</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-xs font-extrabold text-red-400 mb-2">♦ 300 GEMS</div>
+                        <button onclick="buyPlayerPack('ARGENTINA')" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-2.5 rounded-xl text-[10px] uppercase tracking-wider transition-all">
+                            Mở Gói Quà
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pack 4: Anh -->
+                <div class="bg-gradient-to-b from-[#181136] to-black border border-blue-500/30 rounded-2xl p-4 flex flex-col justify-between text-center">
+                    <div>
+                        <span class="text-[9px] bg-yellow-500 text-black px-2 py-0.5 rounded font-black uppercase">450% GIÁ TRỊ</span>
+                        <h3 class="text-xs font-black text-blue-300 uppercase mt-2">TWG ENGLAND Đồng</h3>
+                        <div class="w-28 mx-auto aspect-[1/1.38] bg-gradient-to-tr from-[#911a1a] to-white rounded-xl flex items-center justify-center border border-white/10 shadow-lg relative overflow-hidden my-3">
+                            <div class="absolute inset-0 bg-black/20 flex flex-col justify-between p-2 text-left">
+                                <span class="text-[8px] font-black text-red-300">ENGLAND</span>
+                                <span class="text-xl font-black text-center text-white">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                                <span class="text-[10px] font-extrabold text-white text-center block">115-119</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-xs font-extrabold text-red-400 mb-2">♦ 100 GEMS</div>
+                        <button onclick="buyPlayerPack('ENGLAND')" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-2.5 rounded-xl text-[10px] uppercase tracking-wider transition-all">
+                            Mở Gói Quà
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. EXCHANGES (Trao Đổi - Tái hiện từ hình ảnh 4) -->
+        <div id="screen-exchange" class="hidden p-4 md:p-6 flex-col justify-between h-full">
+            <div class="grid grid-cols-12 gap-5 items-stretch flex-grow">
+                <!-- Left Coach welcome bubble -->
+                <div class="col-span-5 bg-black/50 border border-white/10 rounded-2xl p-6 flex flex-col justify-between items-center text-center">
+                    <div>
+                        <div class="w-16 h-16 rounded-full bg-blue-900 border border-yellow-500/40 flex items-center justify-center text-xl shadow mb-4">
+                            👤
+                        </div>
+                        <h4 class="text-xs font-black text-yellow-500 uppercase tracking-widest mb-2">Huấn Luyện Viên</h4>
+                        <p class="text-xs text-gray-300 leading-relaxed bg-white/5 p-4 rounded-xl border border-white/5">
+                            "Chào mừng đến với mục Trao Đổi, nơi bạn có thể đổi thẻ cầu thủ lấy các loại vật phẩm khác như vàng coins ảo!"
+                        </p>
+                    </div>
+                    
+                    <div class="text-[10px] text-gray-500">
+                        Hết hạn trao đổi sau: 20 Ngày
+                    </div>
+                </div>
+
+                <!-- Right Exchange actions -->
+                <div class="col-span-7 space-y-4">
+                    <!-- Exchange for Coin -->
+                    <div class="p-4 rounded-xl bg-gradient-to-r from-yellow-950/20 to-black border border-yellow-500/20 flex justify-between items-center">
+                        <div>
+                            <span class="text-xs font-black text-yellow-500">TRAO ĐỔI COIN</span>
+                            <div class="text-[10px] text-gray-400 mt-1">Sử dụng cầu thủ OVR 81-112 dư thừa</div>
+                        </div>
+                        <button onclick="performExchange('COIN')" class="bg-yellow-500 hover:bg-yellow-400 text-black font-black text-xs px-6 py-2 rounded-xl transition-all">
+                            Đổi 🪙 5.000.000
+                        </button>
+                    </div>
+
+                    <!-- Exchange for Elite Pack -->
+                    <div class="p-4 rounded-xl bg-gradient-to-r from-blue-950/20 to-black border border-blue-500/20 flex justify-between items-center">
+                        <div>
+                            <span class="text-xs font-black text-blue-400">TRAO ĐỔI KẾ THỪA 03</span>
+                            <div class="text-[10px] text-gray-400 mt-1">Đổi thẻ OVR 95-117 lấy thẻ ngẫu nhiên</div>
+                        </div>
+                        <button onclick="performExchange('PLAYER')" class="bg-blue-600 hover:bg-blue-500 text-white font-black text-xs px-6 py-2 rounded-xl transition-all">
+                            Trao Đổi ⚽
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. QUESTS (Nhiệm Vụ Đấu Xếp Hạng - Tái hiện từ hình ảnh 2) -->
+        <div id="screen-quests" class="hidden p-4 md:p-6 flex-col justify-between h-full">
+            <div class="grid grid-cols-12 gap-5 items-stretch flex-grow">
+                <!-- Quests Challenge List -->
+                <div class="col-span-8 bg-black/40 border border-white/10 rounded-2xl p-5 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-black text-yellow-500 uppercase tracking-wider mb-4">
+                            📈 Thử Thách Đấu Xếp Hạng
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/10">
+                                <div>
+                                    <span class="font-bold text-xs block">Chuyên Gia Đấu Đỉnh Cao 1</span>
+                                    <span class="text-[10px] text-gray-400">Thắng 2 trận Đấu Đỉnh Cao Xếp Hạng</span>
+                                </div>
+                                <button onclick="changeMenuTab('PLAY')" class="bg-blue-500 text-white text-[10px] font-black px-4 py-1.5 rounded-lg">ĐI</button>
+                            </div>
+                            <div class="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/10">
+                                <div>
+                                    <span class="font-bold text-xs block">Chuyên Gia Đấu Đỉnh Cao 2</span>
+                                    <span class="text-[10px] text-gray-400">Thắng 5 trận Đấu Đỉnh Cao Xếp Hạng</span>
+                                </div>
+                                <button onclick="changeMenuTab('PLAY')" class="bg-blue-500 text-white text-[10px] font-black px-4 py-1.5 rounded-lg">ĐI</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reward Board -->
+                <div class="col-span-4 bg-black/60 border border-white/10 rounded-2xl p-5 flex flex-col justify-between text-center">
+                    <div>
+                        <h3 class="text-xs font-black text-yellow-500 uppercase tracking-widest mb-4">Phần Thưởng</h3>
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/5 mb-4 text-center">
+                            <div class="text-xl">🎁</div>
+                            <div class="text-[10px] text-gray-400 mt-2">Hộp Quà Siêu Sao Hạn Giờ</div>
+                        </div>
+                    </div>
+                    <button onclick="claimQuestReward()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all">
+                        NHẬN QUÀ
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. UPGRADES (Luyện Tập) -->
+        <div id="screen-upgrade" class="hidden p-4 md:p-6 flex-col justify-between h-full">
+            <div class="grid grid-cols-12 gap-5 items-stretch flex-grow">
+                <div class="col-span-5 bg-black/50 border border-white/10 rounded-2xl p-5 flex flex-col justify-between items-center text-center">
+                    <div class="w-full">
+                        <h3 class="text-xs font-black text-yellow-500 uppercase tracking-widest mb-4">Luyện Tập Siêu Sao</h3>
+                        <div id="upgrade-card-showcase" class="w-36 mx-auto mb-4"></div>
+                    </div>
+                    <div class="w-full bg-white/5 p-3 rounded-xl border border-white/5 text-xs text-left">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-gray-400">Cấp sút phạt:</span>
+                            <span id="upgrade-shoot-val" class="font-bold text-yellow-400">120 OVR</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Cấp sút xoáy:</span>
+                            <span id="upgrade-curve-val" class="font-bold text-yellow-400">125 OVR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-span-7 bg-black/40 border border-white/10 rounded-2xl p-5 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-black text-white uppercase tracking-wider mb-2">⚡ Phòng Tập Thể Lực Đỉnh Cao</h3>
+                        <p class="text-xs text-gray-400 mb-6 leading-relaxed">Nâng cao thể lực và kỹ thuật sút phạt cho siêu sao của bạn. Tăng chỉ số để sút bóng bay mạnh mẽ và uốn cong chuẩn xác hơn!</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/5">
+                                <div>
+                                    <span class="font-bold text-xs md:text-sm block">Huấn Luyện Sút Phạt (+2 SÚT)</span>
+                                    <span class="text-[10px] text-gray-400">Tăng lực sút và độ chính xác</span>
+                                </div>
+                                <button onclick="trainActivePlayer('shoot')" class="bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-2 rounded-lg text-xs font-black transition-all">
+                                    🪙 30,000
+                                </button>
+                            </div>
+
+                            <div class="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/5">
+                                <div>
+                                    <span class="font-bold text-xs md:text-sm block">Huấn Luyện Sút Xoáy (+2 XOÁY)</span>
+                                    <span class="text-[10px] text-gray-400">Tăng độ uốn lượn hình quả chuối</span>
+                                </div>
+                                <button onclick="trainActivePlayer('curve')" class="bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-2 rounded-lg text-xs font-black transition-all">
+                                    🪙 30,000
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- GAMEPLAY CANVAS -->
+    <canvas id="gameCanvas" class="w-full h-full block absolute inset-0 z-10"></canvas>
+
+    <!-- IN-GAME INTERACTION HUD OVERLAYS -->
+    <div id="gameplay-hud" class="hidden absolute top-[64px] left-0 w-full px-6 py-2 justify-between items-center z-40 pointer-events-none">
+        <div class="bg-black/85 backdrop-blur-md px-4 py-2 rounded-xl border-l-4 border-red-600 shadow-lg pointer-events-auto">
             <div id="hud-match-title" class="text-[9px] uppercase font-bold tracking-widest text-yellow-400">TẤN CÔNG NHANH</div>
             <div class="text-xl font-extrabold flex items-center gap-2">
                 <span class="text-red-500">VN</span> <span id="score-val" class="text-white">0</span>
@@ -80,178 +625,67 @@
             </div>
         </div>
 
-        <!-- Real penalty turn indicator dots -->
-        <div id="penalty-dots-hud" class="flex gap-1.5 bg-black/50 p-2 rounded-lg border border-white/10">
-            <!-- Will be dynamically filled with dot icons -->
-        </div>
+        <div id="penalty-dots-hud" class="flex gap-1.5 bg-black/60 p-2 rounded-lg border border-white/10"></div>
 
-        <div id="active-shooter-hud" class="bg-black/80 backdrop-blur-md px-4 py-2 rounded-xl border-r-4 border-yellow-500 shadow-lg pointer-events-auto flex items-center gap-3">
+        <div id="active-shooter-hud" class="bg-black/85 backdrop-blur-md px-4 py-2 rounded-xl border-r-4 border-yellow-500 shadow-lg pointer-events-auto flex items-center gap-3">
             <div class="text-right">
                 <div class="text-xs font-bold" id="hud-player-name">N. QUANG HẢI</div>
                 <div class="text-[10px] text-yellow-400 font-semibold" id="hud-player-stats">SÚT: 122 | XOÁY: 118</div>
             </div>
-            <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-black font-black text-xs">
+            <div id="hud-player-rating-badge" class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-black font-black text-xs">
                 120
             </div>
         </div>
     </div>
 
-    <!-- Active Game Screen (Canvas for gameplay phases) -->
-    <canvas id="gameCanvas" class="w-full h-full block absolute inset-0 z-10"></canvas>
-
-    <!-- Custom Alerts or Gooooal text overlays -->
-    <div id="message" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl sm:text-6xl font-black text-center uppercase tracking-wider z-50 pointer-events-none transition-all duration-300 scale-50 opacity-0 glow-text">
-        VÀOOO!
-    </div>
-
-    <!-- Back to menu button (Only visible in-game) -->
+    <!-- EXIT GAMEPLAY BUTTON -->
     <button id="btn-back-menu" class="hidden absolute bottom-6 left-6 z-40 bg-black/80 hover:bg-red-700 hover:text-white border border-gray-700 text-gray-300 px-4 py-2.5 rounded-xl font-bold transition-all text-xs flex items-center gap-2">
         ← RỜI TRẬN
     </button>
 
-    <!-- Mode switch indicator / swipe indicator -->
+    <!-- HINTS INFO -->
     <div id="game-tip" class="hidden absolute bottom-6 right-6 z-40 bg-black/60 backdrop-blur-md px-4 py-2 rounded-lg text-xs text-gray-300 border border-white/10 max-w-xs text-right">
-        💡 <span id="tip-text">Vuốt trái/phải để rê bóng né hậu vệ!</span>
+        💡 <span id="tip-text">Dùng phím A-D, chạm màn hình hoặc Joystick ảo để di chuyển!</span>
     </div>
 
-    <!-- MAIN MENU & SQUAD SELECTION SCREEN -->
-    <div id="main-menu" class="absolute inset-0 z-50 flex flex-col justify-between bg-gradient-to-b from-[#0e1811] via-[#070b08] to-[#120505] overflow-y-auto p-4 md:p-8">
-        
-        <!-- Header -->
-        <div class="w-full flex flex-col md:flex-row justify-between items-center border-b border-yellow-500/20 pb-4">
-            <div class="text-center md:text-left mb-4 md:mb-0">
-                <h1 class="text-3xl md:text-5xl font-black tracking-tighter text-[#da251d]">FC MOBILE <span class="text-white glow-text">VN</span></h1>
-                <p class="text-xs md:text-sm text-yellow-500 font-bold uppercase tracking-widest mt-1">✪ Đội Hình Tiêu Biểu Việt Nam Đỉnh Cao ✪</p>
-            </div>
+    <!-- PACK OPENING MODAL POPUP REVEAL -->
+    <div id="pack-reveal-modal" class="hidden absolute inset-0 z-[100] bg-black/95 flex flex-col justify-center items-center p-6">
+        <div class="text-center max-w-sm w-full">
+            <h2 class="text-yellow-400 font-black text-lg uppercase tracking-widest mb-2 animate-pulse">✪ SIÊU SAO ĐÃ XUẤT HIỆN! ✪</h2>
+            <p id="pack-reveal-title" class="text-xs text-gray-400 mb-8">Bạn nhận được một tuyển thủ quốc gia mới!</p>
             
-            <div class="flex flex-col sm:flex-row gap-3 items-center">
-                <!-- Difficulty Selector Buttons -->
-                <div class="bg-black/40 p-1 rounded-xl border border-white/10 flex gap-1">
-                    <button onclick="setDifficulty('EASY')" id="diff-easy-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-gray-800 text-gray-400 hover:text-white">
-                        Gà Con 🐣
-                    </button>
-                    <button onclick="setDifficulty('NORMAL')" id="diff-normal-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-red-600 text-white shadow-lg shadow-red-600/30">
-                        Thường ⚽
-                    </button>
-                    <button onclick="setDifficulty('HARD')" id="diff-hard-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-gray-800 text-gray-400 hover:text-white">
-                        Huyền Thoại 👑
-                    </button>
-                </div>
+            <div id="reveal-card-outer" class="w-48 mx-auto mb-10 relative"></div>
 
-                <div class="flex gap-2">
-                    <button onclick="switchGameMode('TOURNAMENT')" id="mode-tournament-btn" class="bg-yellow-600 text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm shadow-lg shadow-yellow-600/30 border border-yellow-500 uppercase tracking-wider transition-all scale-105">
-                        Giải Đấu 🏆
-                    </button>
-                    <button onclick="switchGameMode('SHOOT')" id="mode-shoot-btn" class="bg-gray-800 text-gray-400 hover:bg-red-700 hover:text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm border border-transparent uppercase tracking-wider transition-all">
-                        Sút Phạt
-                    </button>
-                    <button onclick="switchGameMode('GK')" id="mode-gk-btn" class="bg-gray-800 text-gray-400 hover:bg-green-700 hover:text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm border border-transparent uppercase tracking-wider transition-all">
-                        Thủ Môn
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tactical lineup & selected player showcase -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-6 items-stretch flex-grow">
-            
-            <!-- Tactical Board (4-3-3 representation) -->
-            <div class="lg:col-span-8 tactical-board p-4 flex flex-col justify-between relative min-h-[450px]">
-                <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 border-t border-dashed border-white/10 pointer-events-none"></div>
-                <div class="absolute top-4 left-1/2 -translate-x-1/2 w-48 h-24 border border-white/10 rounded-b-3xl pointer-events-none"></div>
-                
-                <!-- Forwards (ST, ST, RW) -->
-                <div class="flex justify-around items-center z-10">
-                    <div id="slot-1" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(1)"></div>
-                    <div id="slot-2" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(2)"></div>
-                    <div id="slot-3" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(3)"></div>
-                </div>
-
-                <!-- Midfielders (CM, CAM, CM) -->
-                <div class="flex justify-around items-center z-10 my-4">
-                    <div id="slot-4" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(4)"></div>
-                    <div id="slot-5" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(5)"></div>
-                    <div id="slot-6" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(6)"></div>
-                </div>
-
-                <!-- Defenders (LB, CB, CB, RB) -->
-                <div class="flex justify-around items-center z-10">
-                    <div id="slot-7" class="w-[18%] max-w-[80px]" onclick="selectLineupPlayer(7)"></div>
-                    <div id="slot-8" class="w-[18%] max-w-[80px]" onclick="selectLineupPlayer(8)"></div>
-                    <div id="slot-9" class="w-[18%] max-w-[80px]" onclick="selectLineupPlayer(9)"></div>
-                    <div id="slot-10" class="w-[18%] max-w-[80px]" onclick="selectLineupPlayer(10)"></div>
-                </div>
-
-                <!-- Goalkeeper -->
-                <div class="flex justify-center items-center z-10 mt-4">
-                    <div id="slot-11" class="w-[20%] max-w-[90px]" onclick="selectLineupPlayer(11)"></div>
-                </div>
-            </div>
-
-            <!-- Selected Player Statistics card -->
-            <div class="lg:col-span-4 bg-black/60 border border-yellow-500/20 rounded-2xl p-6 flex flex-col justify-between items-center text-center">
-                
-                <!-- Tournament Campaign UI Panel (Only shown in Tournament Mode) -->
-                <div id="tournament-panel" class="w-full mb-4 bg-yellow-950/20 border border-yellow-500/30 p-4 rounded-xl text-left">
-                    <h4 class="text-xs font-black text-yellow-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-                        🏆 Bản đồ Giải Đấu Đỉnh Cao
-                    </h4>
-                    <div class="space-y-2.5 text-xs">
-                        <div id="t-round-1" class="flex justify-between items-center p-2 rounded bg-white/5 border border-white/5">
-                            <span class="font-bold">Quarter-final: vs Indonesia 🇮🇩</span>
-                            <span class="text-[10px] font-black text-yellow-500" id="t-status-1">SẴN SÀNG</span>
-                        </div>
-                        <div id="t-round-2" class="flex justify-between items-center p-2 rounded bg-black/20 text-gray-500">
-                            <span class="font-semibold">Semi-final: vs Thái Lan 🇹🇭</span>
-                            <span class="text-[10px] font-bold" id="t-status-2">CHƯA MỞ</span>
-                        </div>
-                        <div id="t-round-3" class="flex justify-between items-center p-2 rounded bg-black/20 text-gray-500">
-                            <span class="font-semibold">Chung Kết: vs Nhật Bản 🇯🇵</span>
-                            <span class="text-[10px] font-bold" id="t-status-3">KHOÁ</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-[11px] font-bold text-yellow-500 uppercase tracking-widest mb-2">✪ Cầu Thủ Đang Chọn ✪</h3>
-                    <div id="showcase-card-container" class="w-36 mx-auto mb-4">
-                        <!-- Dynamic FC Card rendering goes here -->
-                    </div>
-                </div>
-
-                <div class="w-full space-y-3">
-                    <div>
-                        <div class="flex justify-between text-[10px] font-semibold text-gray-400 mb-0.5">
-                            <span>Kỹ năng Sút phạt</span>
-                            <span id="stat-shoot-val">99%</span>
-                        </div>
-                        <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
-                            <div id="stat-shoot-bar" class="bg-gradient-to-r from-red-500 to-yellow-500 h-full" style="width: 90%"></div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between text-[10px] font-semibold text-gray-400 mb-0.5">
-                            <span>Sút Xoáy (Curve)</span>
-                            <span id="stat-curve-val">95%</span>
-                        </div>
-                        <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
-                            <div id="stat-curve-bar" class="bg-gradient-to-r from-red-500 to-yellow-500 h-full" style="width: 85%"></div>
-                        </div>
-                    </div>
-
-                    <button onclick="launchMatch()" class="w-full bg-gradient-to-r from-[#da251d] to-[#ff5d55] text-white font-black py-3 px-5 rounded-xl text-sm uppercase tracking-wider shadow-lg shadow-red-600/20 hover:shadow-red-600/40 transition-all hover:scale-[1.02] active:scale-[0.98]">
-                        Ra Sân Ngay
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer / Credits -->
-        <div class="w-full text-center text-[10px] text-gray-500 border-t border-white/5 pt-4">
-            FC Mobile VN - Phiên Bản Đội Hình Đỉnh Cao 2026. Phát triển dựa trên sơ đồ chiến thuật tối thượng 4-3-3.
+            <button onclick="closePackReveal()" class="bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-black px-8 py-3.5 rounded-xl uppercase tracking-wider shadow-lg shadow-yellow-500/10 hover:opacity-90 active:scale-95 transition-all text-xs">
+                Thêm vào Đội Hình
+            </button>
         </div>
     </div>
+
+    <!-- BOTTOM TAB NAVIGATION BAR (Khớp 100% với bức ảnh chụp của bạn) -->
+    <div id="footer-tabs" class="absolute bottom-0 left-0 w-full h-[58px] bg-black border-t border-white/10 grid grid-cols-5 items-center justify-center text-center z-50">
+        <button onclick="changeMenuTab('HOME')" id="footer-tab-home" class="text-gray-400 hover:text-yellow-500 py-1 transition-all flex flex-col items-center justify-center gap-0.5">
+            <span class="text-base">🏠</span>
+            <span class="text-[9px] font-black uppercase tracking-tighter">Trang Chủ</span>
+        </button>
+        <button onclick="changeMenuTab('SQUAD')" id="footer-tab-squad" class="text-gray-400 hover:text-yellow-500 py-1 transition-all flex flex-col items-center justify-center gap-0.5">
+            <span class="text-base">🛡</span>
+            <span class="text-[9px] font-black uppercase tracking-tighter">Đội Hình</span>
+        </button>
+        <button onclick="changeMenuTab('EXCHANGE')" id="footer-tab-exchange" class="text-gray-400 hover:text-yellow-500 py-1 transition-all flex flex-col items-center justify-center gap-0.5">
+            <span class="text-base">🔄</span>
+            <span class="text-[9px] font-black uppercase tracking-tighter">Trao Đổi</span>
+        </button>
+        <button onclick="changeMenuTab('QUESTS')" id="footer-tab-quests" class="text-gray-400 hover:text-yellow-500 py-1 transition-all flex flex-col items-center justify-center gap-0.5">
+            <span class="text-base">📈</span>
+            <span class="text-[9px] font-black uppercase tracking-tighter">Nhiệm Vụ</span>
+        </button>
+        <button onclick="changeMenuTab('STORE')" id="footer-tab-store" class="text-gray-400 hover:text-yellow-500 py-1 transition-all flex flex-col items-center justify-center gap-0.5">
+            <span class="text-base">🛒</span>
+            <span class="text-[9px] font-black uppercase tracking-tighter">Cửa Hàng</span>
+        </button>
+    </div>
+
 </div>
 
 <script>
@@ -281,7 +715,6 @@
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.15);
             } else if (type === 'goal') {
-                // Synthesize a crowd cheering noise
                 const bufferSize = audioCtx.sampleRate * 1.5;
                 const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
                 const data = buffer.getChannelData(0);
@@ -321,7 +754,6 @@
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.1);
             } else if (type === 'whistle') {
-                // Referee whistle: High pitch double beep
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(880, audioCtx.currentTime);
                 osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.08);
@@ -338,48 +770,69 @@
                     const g = audioCtx.createGain();
                     o.type = 'triangle';
                     o.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.1);
-                    g.gain.setValueAtTime(0.15, audioCtx.currentTime + idx * 0.1);
+                    g.gain.setValueAtTime(0.15, idx * 0.1);
                     g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + idx * 0.1 + 0.8);
                     o.connect(g);
                     g.connect(audioCtx.destination);
                     o.start(audioCtx.currentTime + idx * 0.1);
                     o.stop(audioCtx.currentTime + idx * 0.1 + 0.8);
                 });
+            } else if (type === 'pack') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 1.2);
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + 0.8);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.6);
             }
         } catch (e) {
-            console.log("Audio context issue: ", e);
+            console.log("Audio contextual restrictions applied by browser");
         }
     }
 
-    const SQUAD = [
-        { id: 1, name: "NGUYỄN VĂN TOÀN", pos: "ST", rating: 119, num: 19, shoot: 118, curve: 110 },
-        { id: 2, name: "NGUYỄN XUÂN SƠN", pos: "ST", rating: 120, num: 30, shoot: 124, curve: 108 },
-        { id: 3, name: "N. CÔNG PHƯỢNG", pos: "RW", rating: 119, num: 10, shoot: 119, curve: 121 },
-        { id: 4, name: "ĐỖ HÙNG DŨNG", pos: "CM", rating: 120, num: 8, shoot: 112, curve: 114 },
-        { id: 5, name: "N. QUANG HẢI", pos: "CAM", rating: 120, num: 19, shoot: 122, curve: 125 },
-        { id: 6, name: "N. HOÀNG ĐỨC", pos: "CM", rating: 120, num: 14, shoot: 115, curve: 119 },
-        { id: 7, name: "ĐOÀN VĂN HẬU", pos: "LB", rating: 119, num: 5, shoot: 109, curve: 115 },
-        { id: 8, name: "QUẾ NGỌC HẢI", pos: "CB", rating: 119, num: 3, shoot: 102, curve: 95 },
-        { id: 9, name: "N. THÀNH CHUNG", pos: "CB", rating: 119, num: 16, shoot: 100, curve: 88 },
-        { id: 10, name: "VŨ VĂN THANH", pos: "RB", rating: 119, num: 17, shoot: 110, curve: 112 },
-        { id: 11, name: "BÙI TẤN TRƯỜNG", pos: "GK", rating: 119, num: 1, shoot: 65, curve: 50 }
+    // Comprehensive Player Database including standard, Golden, Prime Icons!
+    const INITIAL_PLAYER_POOL = [
+        { id: 1, name: "NEYMAR JR", pos: "LW", rating: 118, num: 10, shoot: 119, curve: 122, rarity: 'WELCOME' },
+        { id: 2, name: "LIONEL MESSI", pos: "ST", rating: 119, num: 30, shoot: 124, curve: 128, rarity: 'GOLD' },
+        { id: 3, name: "R. CHERKI", pos: "RW", rating: 123, num: 24, shoot: 128, curve: 125, rarity: 'FLAG' },
+        { id: 4, name: "JOÃO NEVES", pos: "CM", rating: 118, num: 8, shoot: 114, curve: 115, rarity: 'PREMIUM' },
+        { id: 5, name: "J. KARL", pos: "CAM", rating: 121, num: 25, shoot: 121, curve: 120, rarity: 'FLAG' },
+        { id: 6, name: "E. PALACIOS", pos: "CM", rating: 118, num: 14, shoot: 115, curve: 118, rarity: 'PREMIUM' },
+        { id: 7, name: "O'REILLY", pos: "LB", rating: 117, num: 5, shoot: 110, curve: 115, rarity: 'TOTS' },
+        { id: 8, name: "M. SIMAKAN", pos: "CB", rating: 117, num: 2, shoot: 104, curve: 95, rarity: 'TOTS' },
+        { id: 9, name: "MARQUINHOS", pos: "CB", rating: 118, num: 13, shoot: 105, curve: 92, rarity: 'PREMIUM' },
+        { id: 10, name: "J. RYERSON", pos: "RB", rating: 118, num: 17, shoot: 112, curve: 114, rarity: 'PREMIUM' },
+        { id: 11, name: "DAVID RAYA", pos: "GK", rating: 120, num: 30, shoot: 65, curve: 50, rarity: 'TOTS' },
+        
+        // Gacha Pack exclusive superstars (mở gói khóa)
+        { id: 12, name: "QUANG HẢI", pos: "CAM", rating: 122, num: 19, shoot: 125, curve: 128, rarity: 'TOTS' },
+        { id: 13, name: "TIẾN LINH", pos: "ST", rating: 121, num: 22, shoot: 124, curve: 110, rarity: 'WELCOME' },
+        { id: 14, name: "VĂN TOÀN", pos: "RW", rating: 122, num: 9, shoot: 123, curve: 115, rarity: 'FLAG' },
+        { id: 15, name: "CÔNG PHƯỢNG", pos: "ST", rating: 118, num: 10, shoot: 115, curve: 120, rarity: 'GOLD' }
     ];
 
-    const TOURNAMENT_ROUNDS = [
-        { round: 1, opponent: "Indonesia 🇮🇩", flag: "IDN", gkRating: 112, shootRating: 110 },
-        { round: 2, opponent: "Thái Lan 🇹🇭", flag: "THA", gkRating: 116, shootRating: 115 },
-        { round: 3, opponent: "Nhật Bản 🇯🇵", flag: "JPN", gkRating: 120, shootRating: 120 }
-    ];
+    // Current inventory of owned players
+    let playerInventory = [...INITIAL_PLAYER_POOL.slice(0, 11)]; 
 
-    let currentSelectedId = 5; 
+    // Active squad starting slots index matching 4-3-3 Attacking
+    let activeSquadIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]; 
+
+    // Coins and gems matches your screenshot values
+    let coins = 33840165;
+    let gems = 3796;
+
+    let currentSelectedId = 2; // Messi
     let currentGameMode = 'TOURNAMENT'; 
     let currentDifficulty = 'NORMAL'; 
     let currentTournamentRound = 1; 
 
-    // Game Core State Machine
-    // 'MENU', 'DRIBBLE_RUN', 'AIMING', 'KICKING', 'GOAL_CELEBRATION', 'SAVED', 'OUT'
-    let gameState = 'MENU'; 
+    // Replacements
+    let selectedSlotIndex = null; 
 
+    // Active game variables
+    let gameState = 'MENU'; 
     let score = 0; 
     let misses = 0; 
     let shootoutTurn = 0; 
@@ -387,186 +840,371 @@
     let oppShootoutResults = [];
     let confettiParticles = [];
 
-    // Physics variables
+    // Game Physics Models
     let ball = { x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, radius: 16, spin: 0 };
     let goalie = { x: 0, y: 0, w: 60, h: 90, targetX: 0, targetY: 0, isDiving: false };
     let goal = { x: 0, y: 0, w: 0, h: 0 };
 
-    // Interactive Defensive Wall (Hàng rào sút phạt)
+    // Set piece elements
     let isFreeKick = false;
-    let wallDefenders = []; // Array of defender objects {x, y, z, jumpOffset}
+    let wallDefenders = []; 
     let wallJumping = false;
     let wallJumpTimer = 0;
 
-    // Dribbling (Tấn công nhanh) Phase variables
+    // Dribbling Phase with virtual controls
     let dribbler = { x: 0, y: 0, targetX: 0, width: 40, speed: 6 };
     let fieldScrollY = 0;
-    let defensiveTacklers = []; // Opponent defenders trying to tackle
-    let dribblingProgress = 0; // 0 to 100% of the run
+    let defensiveTacklers = []; 
+    let dribblingProgress = 0; 
     let lastTacklerSpawnTime = 0;
     let dribbleStatusText = "";
 
-    // Input touch tracking
+    // On-screen Mobile Controls (Joystick)
+    let joyBase = { x: 100, y: 0, r: 50 };
+    let joyKnob = { x: 100, y: 0, r: 25 };
+    let joyActive = false;
+
     let touchStart = { x: 0, y: 0, time: 0 };
     let touchPoints = []; 
     let isDrawingSwipe = false;
 
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
+    // Setup menu navigation tabs matching footers
+    function changeMenuTab(tabName) {
+        document.getElementById('screen-home').style.display = 'none';
+        document.getElementById('screen-squad').style.display = 'none';
+        document.getElementById('screen-play').style.display = 'none';
+        document.getElementById('screen-exchange').style.display = 'none';
+        document.getElementById('screen-quests').style.display = 'none';
+        document.getElementById('screen-store').style.display = 'none';
+        document.getElementById('screen-upgrade').style.display = 'none';
 
-    // Load initial configurations
-    function init() {
-        renderSquadTactical();
-        updateSelectedPlayerUI();
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        // Setup touch & mouse interaction
-        canvas.addEventListener('mousedown', onSwipeStart);
-        canvas.addEventListener('mousemove', onSwipeMove);
-        canvas.addEventListener('mouseup', onSwipeEnd);
-
-        canvas.addEventListener('touchstart', (e) => {
-            const touch = e.touches[0];
-            onSwipeStart({ clientX: touch.clientX, clientY: touch.clientY });
-        }, { passive: true });
-        canvas.addEventListener('touchmove', (e) => {
-            const touch = e.touches[0];
-            onSwipeMove({ clientX: touch.clientX, clientY: touch.clientY });
-        }, { passive: true });
-        canvas.addEventListener('touchend', onSwipeEnd);
-
-        document.getElementById('btn-back-menu').addEventListener('click', () => {
-            exitToMenu();
+        // Reset Tab active highlight colors
+        const tabs = ['home', 'squad', 'exchange', 'quests', 'store'];
+        tabs.forEach(t => {
+            document.getElementById(`footer-tab-${t}`).className = "text-gray-400 hover:text-yellow-500 py-1 transition-all flex flex-col items-center justify-center gap-0.5";
         });
 
-        switchGameMode('TOURNAMENT');
+        if (tabName === 'HOME') {
+            document.getElementById('screen-home').style.display = 'flex';
+            document.getElementById('footer-tab-home').className = "text-yellow-400 py-1 transition-all flex flex-col items-center justify-center gap-0.5";
+        } else if (tabName === 'SQUAD') {
+            document.getElementById('screen-squad').style.display = 'flex';
+            document.getElementById('footer-tab-squad').className = "text-yellow-400 py-1 transition-all flex flex-col items-center justify-center gap-0.5";
+            renderSquadLineup();
+            renderSquadInventory();
+        } else if (tabName === 'EXCHANGE') {
+            document.getElementById('screen-exchange').style.display = 'flex';
+            document.getElementById('footer-tab-exchange').className = "text-yellow-400 py-1 transition-all flex flex-col items-center justify-center gap-0.5";
+        } else if (tabName === 'QUESTS') {
+            document.getElementById('screen-quests').style.display = 'flex';
+            document.getElementById('footer-tab-quests').className = "text-yellow-400 py-1 transition-all flex flex-col items-center justify-center gap-0.5";
+        } else if (tabName === 'STORE') {
+            document.getElementById('screen-store').style.display = 'flex';
+            document.getElementById('footer-tab-store').className = "text-yellow-400 py-1 transition-all flex flex-col items-center justify-center gap-0.5";
+        } else if (tabName === 'PLAY') {
+            document.getElementById('screen-play').style.display = 'flex';
+        } else if (tabName === 'UPGRADE') {
+            document.getElementById('screen-upgrade').style.display = 'flex';
+            renderTrainingShowcase();
+        }
     }
 
-    function renderSquadTactical() {
-        SQUAD.forEach(p => {
-            const container = document.getElementById(`slot-${p.id}`);
+    // Dynamic visual generators
+    function renderSquadLineup() {
+        for (let i = 1; i <= 11; i++) {
+            const container = document.getElementById(`slot-${i}`);
+            const playerId = activeSquadIds[i - 1];
+            const player = playerInventory.find(p => p.id === playerId) || INITIAL_PLAYER_POOL[i-1];
             if (container) {
-                container.innerHTML = createCardHTML(p);
+                container.innerHTML = generateMiniCard(player, i);
             }
+        }
+    }
+
+    function renderSquadInventory() {
+        const invList = document.getElementById('inventory-list');
+        invList.innerHTML = '';
+        playerInventory.forEach(player => {
+            const isActive = activeSquadIds.includes(player.id);
+            let colorBorder = "border-[#00f0ff]";
+            if (player.rarity === 'TOTS') colorBorder = "border-yellow-500";
+            if (player.rarity === 'WELCOME') colorBorder = "border-purple-500";
+
+            invList.innerHTML += `
+                <div onclick="selectInventoryCard(${player.id})" class="fc-card rounded-lg overflow-hidden border ${colorBorder} p-1.5 text-center cursor-pointer text-[9px] relative ${isActive ? 'opacity-40' : ''}">
+                    <div class="flex justify-between items-start font-black text-[9px] leading-none">
+                        <span class="text-yellow-400 font-extrabold">${player.rating}</span>
+                        <span class="text-gray-300">${player.pos}</span>
+                    </div>
+                    <div class="my-1.5 text-white font-bold leading-none text-[8px] truncate">${player.name.split(' ').slice(-1)[0]}</div>
+                    <div class="text-[6px] text-gray-500 font-black">${player.rarity}</div>
+                </div>
+            `;
         });
     }
 
-    function createCardHTML(p) {
+    function generateMiniCard(p, slotIdx) {
+        let cardStyle = "fc-card-premium";
+        if (p.rarity === 'TOTS') cardStyle = "fc-card-tots";
+        if (p.rarity === 'WELCOME') cardStyle = "fc-card-welcome";
+        if (p.rarity === 'FLAG') cardStyle = "fc-card-flag";
+        
+        const isSelected = selectedSlotIndex === slotIdx;
+
         return `
-            <div class="fc-card rounded-xl overflow-hidden relative border flex flex-col justify-between p-1 md:p-2 text-center cursor-pointer ${currentSelectedId === p.id ? 'selected' : ''}" data-player-id="${p.id}">
-                <div class="flex justify-between items-start">
-                    <div class="text-[7px] md:text-[9px] bg-red-600 text-white font-black px-1 rounded-sm shadow border border-yellow-500">30</div>
-                    <div class="flex flex-col items-end">
-                        <span class="text-xs md:text-sm font-black leading-none text-yellow-400 gold-glow">${p.rating}</span>
-                        <span class="text-[7px] md:text-[9px] font-bold text-gray-300 leading-none">${p.pos}</span>
+            <div class="${cardStyle} rounded-lg overflow-hidden relative border flex flex-col justify-between p-1 text-center cursor-pointer ${isSelected ? 'selected' : ''}">
+                <div class="flex justify-between items-start leading-none">
+                    <span class="text-[6px] bg-red-600 text-white font-black px-0.5 rounded-sm">30</span>
+                    <span class="text-[10px] font-black text-yellow-400">${p.rating}</span>
+                </div>
+                <div class="my-0.5 text-[8px] font-black text-yellow-500 leading-none">${p.pos}</div>
+                <div class="text-[7px] font-black text-white truncate bg-black/40 py-0.5 rounded leading-none">${p.name.split(' ').slice(-1)[0]}</div>
+            </div>
+        `;
+    }
+
+    function selectLineupSlot(slotIdx) {
+        if (selectedSlotIndex === slotIdx) {
+            selectedSlotIndex = null;
+        } else {
+            selectedSlotIndex = slotIdx;
+        }
+        renderSquadLineup();
+    }
+
+    function selectInventoryCard(invPlayerId) {
+        if (selectedSlotIndex === null) return;
+        
+        if (activeSquadIds.includes(invPlayerId)) {
+            selectedSlotIndex = null;
+            renderSquadLineup();
+            return;
+        }
+
+        activeSquadIds[selectedSlotIndex - 1] = invPlayerId;
+        selectedSlotIndex = null;
+        
+        renderSquadLineup();
+        renderSquadInventory();
+    }
+
+    function autoOptimizeSquad() {
+        // Automatically place highest OVR players in active lineup slots
+        let sortedInventory = [...playerInventory].sort((a,b) => b.rating - a.rating);
+        for(let i=0; i<11; i++) {
+            if (sortedInventory[i]) {
+                activeSquadIds[i] = sortedInventory[i].id;
+            }
+        }
+        renderSquadLineup();
+        renderSquadInventory();
+        playSound('fanfare');
+        showFeedback("ĐỘI HÌNH ĐÃ TỰ ĐỘNG TỐI ƯU!", "#fbbf24");
+    }
+
+    // Exchange features
+    function performExchange(type) {
+        if (type === 'COIN') {
+            coins += 5000000;
+            updateCoinsGemsUI();
+            playSound('fanfare');
+            showFeedback("NHẬN 5.000.000 COINS!", "#fbbf24");
+        } else if (type === 'PLAYER') {
+            // Give standard rolled high player
+            const rolled = INITIAL_PLAYER_POOL[Math.floor(Math.random() * INITIAL_PLAYER_POOL.length)];
+            const hasCopy = playerInventory.some(p => p.id === rolled.id);
+            if (!hasCopy) {
+                playerInventory.push(rolled);
+            }
+            playSound('whistle');
+            triggerPackOpeningReveal(rolled, "EXCHANGE");
+        }
+    }
+
+    // Gems / store features
+    function buyPlayerPack(packName) {
+        const cost = packName.includes('SPAIN') || packName.includes('ARGENTINA') ? 300 : 100;
+        if (gems < cost) {
+            alert("Bạn không đủ Kim cương để mở gói này!");
+            return;
+        }
+
+        gems -= cost;
+        updateCoinsGemsUI();
+        playSound('pack');
+
+        // Roll player
+        const rolled = INITIAL_PLAYER_POOL[Math.floor(Math.random() * INITIAL_PLAYER_POOL.length)];
+        const hasCopy = playerInventory.some(p => p.id === rolled.id);
+        if (!hasCopy) playerInventory.push(rolled);
+
+        triggerPackOpeningReveal(rolled, packName);
+    }
+
+    function triggerPackOpeningReveal(player, packName) {
+        const modal = document.getElementById('pack-reveal-modal');
+        const cardContainer = document.getElementById('reveal-card-outer');
+        const title = document.getElementById('pack-reveal-title');
+
+        modal.classList.remove('hidden');
+        title.innerText = `Chúc mừng bạn đã mở ra gói: ${packName}!`;
+
+        let cardStyle = "fc-card-premium";
+        if (player.rarity === 'TOTS') cardStyle = "fc-card-tots";
+        if (player.rarity === 'WELCOME') cardStyle = "fc-card-welcome";
+        if (player.rarity === 'FLAG') cardStyle = "fc-card-flag";
+
+        cardContainer.innerHTML = `
+            <div class="${cardStyle} rounded-2xl overflow-hidden relative border p-4 text-center pack-glow-animation">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs bg-red-600 text-white font-black px-2 py-0.5 rounded shadow">LV 30</span>
+                    <span class="text-2xl font-black text-yellow-400 gold-glow">${player.rating}</span>
+                </div>
+                
+                <div class="text-yellow-500 font-extrabold text-sm mb-4 tracking-widest">${player.pos}</div>
+                
+                <div class="my-4 flex justify-center items-center">
+                    <div class="w-16 h-16 rounded-full bg-blue-900 border-2 border-yellow-500 flex items-center justify-center text-white font-black text-lg">
+                        ${player.num}
                     </div>
                 </div>
 
-                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-25 w-12 md:w-16 h-12 md:h-16 flex items-center justify-center pointer-events-none">
-                    <svg viewBox="0 0 24 24" fill="#ffd700" class="w-full h-full">
-                        <path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192L12 .587z"/>
-                    </svg>
-                </div>
-
-                <div class="my-0.5 flex justify-center items-center z-10 relative">
-                    <div class="w-7 md:w-10 h-7 md:h-10 rounded-full border border-yellow-500 bg-red-700/80 flex items-center justify-center text-white font-extrabold text-xs">
-                        ${p.num}
-                    </div>
-                </div>
-
-                <div class="z-10 bg-black/50 py-0.5 rounded border border-yellow-500/20">
-                    <div class="text-[6px] md:text-[8px] font-black text-white truncate px-1">${p.name.split(' ').slice(-2).join(' ')}</div>
+                <div class="bg-black/60 py-2.5 rounded-xl border border-yellow-500/20 mt-4">
+                    <div class="text-xs font-black text-white tracking-wide truncate px-2">${player.name}</div>
                 </div>
             </div>
         `;
     }
 
-    function selectLineupPlayer(id) {
-        if (currentGameMode === 'GK') return; 
-        currentSelectedId = id;
-        renderSquadTactical();
-        updateSelectedPlayerUI();
+    function closePackReveal() {
+        document.getElementById('pack-reveal-modal').classList.add('hidden');
+        renderSquadLineup();
+        renderSquadInventory();
     }
 
-    function updateSelectedPlayerUI() {
-        const player = SQUAD.find(p => p.id === currentSelectedId);
-        const container = document.getElementById('showcase-card-container');
-        container.innerHTML = createCardHTML(player);
-
-        // Update stats
-        document.getElementById('stat-shoot-val').innerText = player.shoot + ' OVR';
-        document.getElementById('stat-shoot-bar').style.width = ((player.shoot / 130) * 100) + '%';
-        
-        document.getElementById('stat-curve-val').innerText = player.curve + ' OVR';
-        document.getElementById('stat-curve-bar').style.width = ((player.curve / 130) * 100) + '%';
+    // Claim Quest rewards
+    function claimQuestReward() {
+        coins += 1000000;
+        gems += 500;
+        updateCoinsGemsUI();
+        playSound('fanfare');
+        showFeedback("+1.000.000 COIN & +500 GEMS!", "#00ffcc");
     }
 
+    function claimBonusCoins() {
+        coins += 25000000;
+        updateCoinsGemsUI();
+        playSound('fanfare');
+        showFeedback("ĐÃ NHẬN BONUS COINS!", "#fbbf24");
+    }
+
+    function updateCoinsGemsUI() {
+        document.getElementById('global-coins').innerText = coins.toLocaleString();
+        document.getElementById('global-gems').innerText = gems.toLocaleString();
+    }
+
+    // Training showcase render
+    function renderTrainingShowcase() {
+        const player = playerInventory.find(p => p.id === currentSelectedId) || playerInventory[0];
+        currentSelectedId = player.id;
+
+        const showcase = document.getElementById('upgrade-card-showcase');
+        let cardStyle = "fc-card-premium";
+        if (player.rarity === 'TOTS') cardStyle = "fc-card-tots";
+        if (player.rarity === 'WELCOME') cardStyle = "fc-card-welcome";
+
+        showcase.innerHTML = `
+            <div class="${cardStyle} rounded-xl overflow-hidden relative border p-3 text-center">
+                <div class="flex justify-between items-start">
+                    <span class="text-[9px] bg-red-600 text-white font-black px-1.5 rounded">LV 30</span>
+                    <span class="text-lg font-black text-yellow-400">${player.rating}</span>
+                </div>
+                <div class="text-yellow-500 font-bold text-xs mt-1">${player.pos}</div>
+                <div class="my-2 text-white font-black text-[10px] truncate">${player.name}</div>
+            </div>
+        `;
+
+        document.getElementById('upgrade-shoot-val').innerText = `${player.shoot} OVR`;
+        document.getElementById('upgrade-curve-val').innerText = `${player.curve} OVR`;
+    }
+
+    function trainActivePlayer(statType) {
+        const cost = 30000;
+        if (coins < cost) {
+            alert("Bạn không đủ Coins để huấn luyện!");
+            return;
+        }
+
+        const player = playerInventory.find(p => p.id === currentSelectedId);
+        if (!player) return;
+
+        if (statType === 'shoot' && player.shoot < 135) {
+            player.shoot += 2;
+            coins -= cost;
+        } else if (statType === 'curve' && player.curve < 135) {
+            player.curve += 2;
+            coins -= cost;
+        } else {
+            alert("Kỹ năng của cầu thủ đã đạt ngưỡng tối đa!");
+            return;
+        }
+
+        player.rating = Math.max(player.rating, Math.floor((player.shoot + player.curve) / 2));
+
+        updateCoinsGemsUI();
+        playSound('fanfare');
+        renderTrainingShowcase();
+    }
+
+    // Matches Setup & Control config
     function setDifficulty(level) {
         currentDifficulty = level;
-        const easyBtn = document.getElementById('diff-easy-btn');
-        const normalBtn = document.getElementById('diff-normal-btn');
-        const hardBtn = document.getElementById('diff-hard-btn');
+        const ind = document.getElementById('active-difficulty-indicator');
+        const easy = document.getElementById('set-easy');
+        const normal = document.getElementById('set-normal');
+        const hard = document.getElementById('set-hard');
 
-        [easyBtn, normalBtn, hardBtn].forEach(btn => {
-            btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-gray-800 text-gray-400 hover:text-white";
-        });
+        [easy, normal, hard].forEach(btn => btn.className = "py-2 rounded-lg text-xs font-bold bg-gray-800 text-gray-400");
 
         if (level === 'EASY') {
-            easyBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-yellow-600 text-white shadow-lg shadow-yellow-600/30";
+            ind.innerText = "Mức độ: Dễ 🐣";
+            ind.className = "text-xs bg-yellow-600/30 border border-yellow-500 text-yellow-300 px-3 py-1 rounded-full font-bold";
+            easy.className = "py-2 rounded-lg text-xs font-bold bg-yellow-600 text-white";
         } else if (level === 'NORMAL') {
-            normalBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-red-600 text-white shadow-lg shadow-red-600/30";
+            ind.innerText = "Mức độ: Thường ⚽";
+            ind.className = "text-xs bg-red-600/30 border border-red-500 text-red-300 px-3 py-1 rounded-full font-bold";
+            normal.className = "py-2 rounded-lg text-xs font-bold bg-red-600 text-white";
         } else if (level === 'HARD') {
-            hardBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-purple-600 text-white shadow-lg shadow-purple-600/30";
+            ind.innerText = "Mức độ: Huyền Thoại 👑";
+            ind.className = "text-xs bg-purple-600/30 border border-purple-500 text-purple-300 px-3 py-1 rounded-full font-bold";
+            hard.className = "py-2 rounded-lg text-xs font-bold bg-purple-600 text-white";
         }
     }
 
-    function switchGameMode(mode) {
+    function changeMatchMode(mode) {
         currentGameMode = mode;
-        const tourBtn = document.getElementById('mode-tournament-btn');
-        const shootBtn = document.getElementById('mode-shoot-btn');
-        const gkBtn = document.getElementById('mode-gk-btn');
-        const tPanel = document.getElementById('tournament-panel');
+        const mTour = document.getElementById('play-mode-tournament');
+        const mShoot = document.getElementById('play-mode-shoot');
+        const mGk = document.getElementById('play-mode-gk');
 
-        [tourBtn, shootBtn, gkBtn].forEach(btn => {
-            btn.className = "bg-gray-800 text-gray-400 hover:text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm border border-transparent uppercase tracking-wider transition-all";
+        [mTour, mShoot, mGk].forEach(btn => {
+            btn.className = "w-full py-2.5 rounded-lg text-xs font-black bg-gray-800 text-gray-400 flex justify-between px-4";
+            btn.querySelector('span:last-child').innerText = '';
         });
 
         if (mode === 'TOURNAMENT') {
-            tourBtn.className = "bg-yellow-600 text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm shadow-lg shadow-yellow-600/30 border border-yellow-500 uppercase tracking-wider transition-all scale-105";
-            tPanel.style.display = 'block';
-            document.getElementById('tip-text').innerText = "Giải đấu Đỉnh cao 🏆: Sút và Đỡ luân phiên kịch tính!";
-            updateTournamentMap();
-        } else {
-            tPanel.style.display = 'none';
-            if (mode === 'SHOOT') {
-                shootBtn.className = "bg-red-600 text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm shadow-lg shadow-red-600/30 border border-red-500 uppercase tracking-wider transition-all scale-105";
-                document.getElementById('tip-text').innerText = "Rê bóng vượt qua hậu vệ để kiếm Penalty hoặc Đá phạt!";
-            } else {
-                gkBtn.className = "bg-green-600 text-white px-4 py-2 rounded-xl font-black text-xs md:text-sm shadow-lg shadow-green-600/30 border border-green-500 uppercase tracking-wider transition-all scale-105";
-                document.getElementById('tip-text').innerText = "Vuốt thủ môn Bùi Tấn Trường để cản phá những quả sút hiểm của đối thủ.";
-                selectLineupPlayer(11); 
-            }
+            mTour.className = "w-full py-2.5 rounded-lg text-xs font-black bg-yellow-600 text-white border border-yellow-400 flex justify-between px-4";
+            mTour.querySelector('span:last-child').innerText = 'KÍCH HOẠT';
+        } else if (mode === 'SHOOT') {
+            mShoot.className = "w-full py-2.5 rounded-lg text-xs font-black bg-red-600 text-white border border-red-400 flex justify-between px-4";
+            mShoot.querySelector('span:last-child').innerText = 'KÍCH HOẠT';
+        } else if (mode === 'GK') {
+            mGk.className = "w-full py-2.5 rounded-lg text-xs font-black bg-green-600 text-white border border-green-400 flex justify-between px-4";
+            mGk.querySelector('span:last-child').innerText = 'KÍCH HOẠT';
         }
     }
 
-    function updateTournamentMap() {
-        for (let r = 1; r <= 3; r++) {
-            const item = document.getElementById(`t-round-${r}`);
-            const status = document.getElementById(`t-status-${r}`);
-            if (r < currentTournamentRound) {
-                item.className = "flex justify-between items-center p-2 rounded bg-green-950/40 text-green-400 border border-green-500/20";
-                status.innerText = "ĐÃ THẮNG ✓";
-            } else if (r === currentTournamentRound) {
-                item.className = "flex justify-between items-center p-2 rounded bg-yellow-500/10 text-white border border-yellow-500/40 animate-pulse";
-                status.innerText = "SẴN SÀNG";
-            } else {
-                item.className = "flex justify-between items-center p-2 rounded bg-black/40 text-gray-600";
-                status.innerText = "CHƯA MỞ";
-            }
-        }
-    }
-
+    // Game Running Controllers
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -579,43 +1217,28 @@
         resetArena();
     }
 
-    function resetArena() {
-        ball.x = canvas.width / 2;
-        ball.y = canvas.height * 0.85;
-        ball.z = 0;
-        ball.vx = 0;
-        ball.vy = 0;
-        ball.vz = 0;
-        ball.spin = 0;
-
-        goalie.x = canvas.width / 2;
-        goalie.y = goal.y + goal.h;
-        goalie.isDiving = false;
-        goalie.targetX = goalie.x;
-        goalie.targetY = goalie.y;
-
-        // Reset the defensive wall
-        isFreeKick = false;
-        wallDefenders = [];
-        wallJumping = false;
-        wallJumpTimer = 0;
-    }
-
-    // Set up a dynamic dribble run
     function startDribbleRun() {
         gameState = 'DRIBBLE_RUN';
         dribblingProgress = 0;
-        dribbleStatusText = "BẮT ĐẦU TẤN CÔNG NHANH!";
+        dribbleStatusText = "DÙNG JOYSTICK ẢO ĐỂ DI CHUYỂN!";
         dribbler.x = canvas.width / 2;
         dribbler.targetX = canvas.width / 2;
         defensiveTacklers = [];
         lastTacklerSpawnTime = Date.now();
-        document.getElementById('tip-text').innerText = "Vuốt trái/phải hoặc bấm chuột để dẫn bóng né hậu vệ!";
+        
+        joyBase.x = 100;
+        joyBase.y = canvas.height - 110;
+        joyKnob.x = joyBase.x;
+        joyKnob.y = joyBase.y;
+        joyActive = false;
+
+        document.getElementById('tip-text').innerText = "Rê bóng khéo léo để lọt qua vòng vây hậu vệ!";
         document.getElementById('hud-match-title').innerText = "TẤN CÔNG NHANH";
     }
 
     function launchMatch() {
-        document.getElementById('main-menu').classList.add('hidden');
+        document.getElementById('main-content').classList.add('hidden');
+        document.getElementById('footer-tabs').classList.add('hidden');
         document.getElementById('gameplay-hud').classList.remove('hidden');
         document.getElementById('btn-back-menu').classList.remove('hidden');
         document.getElementById('game-tip').classList.remove('hidden');
@@ -632,8 +1255,9 @@
             document.getElementById('hud-match-title').innerText = `ĐỐI THỦ: ${oppData.opponent.toUpperCase()}`;
             document.getElementById('opp-flag-hud').innerText = oppData.flag;
             
-            currentSelectedId = 5; 
-            updateSelectedPlayerUI();
+            // First shooter is active slot
+            currentSelectedId = activeSquadIds[1]; 
+            updateGameplayHUDShooter();
             
             renderPenaltyDots();
             startDribbleRun();
@@ -642,8 +1266,8 @@
             document.getElementById('opp-flag-hud').innerText = currentGameMode === 'SHOOT' ? 'GK' : 'AI';
             
             if (currentGameMode === 'GK') {
-                currentSelectedId = 11;
-                updateSelectedPlayerUI();
+                currentSelectedId = activeSquadIds[10]; // Raya GK index
+                updateGameplayHUDShooter();
                 triggerAIShooter();
             } else {
                 startDribbleRun();
@@ -652,53 +1276,27 @@
         updateScoresUI();
     }
 
-    function renderPenaltyDots() {
-        const dotsContainer = document.getElementById('penalty-dots-hud');
-        dotsContainer.innerHTML = '';
-        
-        for (let i = 0; i < 5; i++) {
-            let uColor = 'bg-gray-600';
-            if (userShootoutResults[i] === 'GOAL') uColor = 'bg-green-500';
-            else if (userShootoutResults[i] === 'MISS') uColor = 'bg-red-500';
-
-            let oColor = 'bg-gray-600';
-            if (oppShootoutResults[i] === 'GOAL') oColor = 'bg-green-400';
-            else if (oppShootoutResults[i] === 'MISS') oColor = 'bg-red-500';
-
-            dotsContainer.innerHTML += `
-                <div class="flex flex-col items-center gap-1">
-                    <div class="w-2.5 h-2.5 rounded-full ${uColor}"></div>
-                    <div class="w-2.5 h-2.5 rounded-full ${oColor} opacity-70"></div>
-                </div>
-            `;
-        }
+    function updateGameplayHUDShooter() {
+        const player = playerInventory.find(p => p.id === currentSelectedId) || INITIAL_PLAYER_POOL[0];
+        document.getElementById('hud-player-name').innerText = player.name;
+        document.getElementById('hud-player-stats').innerText = `SÚT: ${player.shoot} | XOÁY: ${player.curve}`;
+        document.getElementById('hud-player-rating-badge').innerText = player.rating;
     }
 
-    function exitToMenu() {
-        document.getElementById('main-menu').classList.remove('hidden');
-        document.getElementById('gameplay-hud').classList.add('hidden');
-        document.getElementById('btn-back-menu').classList.add('hidden');
-        document.getElementById('game-tip').classList.add('hidden');
-        gameState = 'MENU';
-        updateTournamentMap();
-    }
-
-    function updateScoresUI() {
-        document.getElementById('score-val').innerText = score;
-        document.getElementById('opp-score-val').innerText = misses;
-        if (currentGameMode === 'TOURNAMENT') {
-            renderPenaltyDots();
-        }
-    }
-
-    // Input handlers
+    // Input touch control mapping
     function onSwipeStart(e) {
         const x = e.clientX || e.touches[0].clientX;
         const y = e.clientY || e.touches[0].clientY;
 
         if (gameState === 'DRIBBLE_RUN') {
-            // Click/tap left/right of screen to steer dribbler quickly
-            dribbler.targetX = x;
+            const distToJoy = Math.hypot(x - joyBase.x, y - joyBase.y);
+            if (distToJoy < joyBase.r * 1.5) {
+                joyActive = true;
+                joyKnob.x = x;
+                joyKnob.y = y;
+            } else {
+                dribbler.targetX = x;
+            }
             return;
         }
 
@@ -729,7 +1327,17 @@
         const y = e.clientY || e.touches[0].clientY;
 
         if (gameState === 'DRIBBLE_RUN') {
-            dribbler.targetX = x;
+            if (joyActive) {
+                const angle = Math.atan2(y - joyBase.y, x - joyBase.x);
+                const dist = Math.min(joyBase.r, Math.hypot(x - joyBase.x, y - joyBase.y));
+                
+                joyKnob.x = joyBase.x + Math.cos(angle) * dist;
+                joyKnob.y = joyBase.y + Math.sin(angle) * dist;
+
+                dribbler.vx = (joyKnob.x - joyBase.x) * 0.15;
+            } else {
+                dribbler.targetX = x;
+            }
             return;
         }
 
@@ -742,6 +1350,14 @@
     }
 
     function onSwipeEnd(e) {
+        if (gameState === 'DRIBBLE_RUN') {
+            joyActive = false;
+            joyKnob.x = joyBase.x;
+            joyKnob.y = joyBase.y;
+            dribbler.vx = 0;
+            return;
+        }
+
         if (!isDrawingSwipe) return;
         isDrawingSwipe = false;
 
@@ -758,7 +1374,7 @@
         const isUserGK = (currentGameMode === 'GK') || (currentGameMode === 'TOURNAMENT' && shootoutTurn % 2 === 1);
 
         if (!isUserGK) {
-            // USER SHOOTS BALL
+            // USER KICKS BALL
             const speed = Math.min(18, (distance / duration) * 8); 
             const angle = Math.atan2(dy, dx);
             
@@ -771,7 +1387,6 @@
             gameState = 'KICKING';
             playSound('kick');
 
-            // Defensive wall jumps!
             if (isFreeKick) {
                 wallJumping = true;
                 wallJumpTimer = 0;
@@ -779,7 +1394,7 @@
 
             triggerGoalieAI();
         } else {
-            // USER DIVES AS GK
+            // USER GK DIVES
             goalie.isDiving = true;
             let gkSpeedMod = 1.2;
             if (currentDifficulty === 'EASY') gkSpeedMod = 0.8;
@@ -791,21 +1406,18 @@
         }
     }
 
-    function calculateSwipeCurve() {
-        if (touchPoints.length < 5) return 0;
-        let sumCurvature = 0;
-        for (let i = 2; i < touchPoints.length - 2; i++) {
-            const v1x = touchPoints[i].x - touchPoints[0].x;
-            const v1y = touchPoints[i].y - touchPoints[0].y;
-            const v2x = touchPoints[touchPoints.length - 1].x - touchPoints[i].x;
-            const v2y = touchPoints[touchPoints.length - 1].y - touchPoints[i].y;
-            
-            const cross = v1x * v2y - v1y * v2x;
-            sumCurvature += cross;
+    // Support keyboard controls for desktop users
+    window.addEventListener('keydown', (e) => {
+        if (gameState === 'DRIBBLE_RUN') {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                dribbler.targetX -= 45;
+            } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                dribbler.targetX += 45;
+            }
         }
-        return sumCurvature / touchPoints.length;
-    }
+    });
 
+    // Goalkeeper reaction algorithms
     function triggerGoalieAI() {
         let reactionDelay = 150;
         if (currentDifficulty === 'EASY') reactionDelay = 350;
@@ -814,7 +1426,7 @@
         setTimeout(() => {
             goalie.isDiving = true;
             
-            const player = SQUAD.find(p => p.id === currentSelectedId);
+            const player = playerInventory.find(p => p.id === currentSelectedId);
             const shootAccuracy = player ? player.shoot : 110;
 
             const rollChance = Math.random() * 100;
@@ -848,7 +1460,7 @@
         resetArena();
 
         if (currentGameMode === 'TOURNAMENT') {
-            document.getElementById('tip-text').innerText = "ĐỐI THỦ SÚT! Vuốt nhanh để thủ môn Tấn Trường cản phá!";
+            document.getElementById('tip-text').innerText = "ĐỐI THỦ SÚT! Vuốt nhanh để thủ môn Raya cản phá!";
         }
 
         const currentRoundData = TOURNAMENT_ROUNDS[currentTournamentRound - 1];
@@ -896,7 +1508,6 @@
             showFeedback('KHÔNG VÀO!', '#666');
             result = 'MISS';
         } else {
-            // Hit posts
             const borderX = 15;
             const borderY = 15;
             const hitLeft = Math.abs(ball.x - goal.x) < borderX;
@@ -917,7 +1528,6 @@
             }
         }
 
-        // Apply results depending on current mode
         if (currentGameMode === 'TOURNAMENT') {
             const isUserTurn = (shootoutTurn % 2 === 0);
             if (isUserTurn) {
@@ -928,7 +1538,6 @@
                     userShootoutResults.push('MISS');
                 }
             } else {
-                // Opponent turn
                 if (result === 'GOAL') {
                     misses++;
                     oppShootoutResults.push('GOAL');
@@ -946,22 +1555,30 @@
                     if (shootoutTurn % 2 === 1) {
                         triggerAIShooter();
                     } else {
-                        // Vietnam's turn to play again: start with another Dribble Run!
-                        currentSelectedId = Math.floor(Math.random() * 10) + 1; 
-                        updateSelectedPlayerUI();
+                        const squadPosIdx = Math.floor(shootoutTurn / 2);
+                        currentSelectedId = activeSquadIds[squadPosIdx % 10]; 
+                        updateGameplayHUDShooter();
                         startDribbleRun();
                     }
                 }, 2200);
             }
         } else {
-            // Simple mode scoring
             if (result === 'GOAL') {
-                if (currentGameMode === 'SHOOT') score++;
-                else misses++;
+                if (currentGameMode === 'SHOOT') {
+                    score++;
+                    coins += 1500000; 
+                } else {
+                    misses++;
+                }
             } else {
-                if (currentGameMode === 'SHOOT') misses++;
-                else score++;
+                if (currentGameMode === 'SHOOT') {
+                    misses++;
+                } else {
+                    score++;
+                    coins += 1500000;
+                }
             }
+            updateCoinsGemsUI();
             updateScoresUI();
             
             setTimeout(() => {
@@ -982,12 +1599,15 @@
                 playSound('fanfare');
                 triggerConfetti();
 
+                coins += roundData.award;
+                updateCoinsGemsUI();
+
                 if (currentTournamentRound < 3) {
-                    showFeedback(`THẮNG TRẬN ${roundData.opponent}! NHẬN VÉ ĐI TIẾP!`, '#fbbf24');
+                    showFeedback(`THẮNG! NHẬN 🪙 ${roundData.award.toLocaleString()} COINS!`, '#fbbf24');
                     currentTournamentRound++;
                     setTimeout(() => { exitToMenu(); }, 3500);
                 } else {
-                    showFeedback("🏆 VÔ ĐỊCH GIẢI ĐẤU ĐỈNH CAO! 🏆", '#ffd700');
+                    showFeedback("🏆 VÔ ĐỊCH GIẢI ĐẤU ĐỈNH CAO! VN VÔ ĐỊCH! 🏆", '#ffd700');
                     currentTournamentRound = 1; 
                     setTimeout(() => { exitToMenu(); }, 5000);
                 }
@@ -1027,13 +1647,10 @@
         }, 2200);
     }
 
-    // Trigger the foul aftermath and set piece type
     function triggerFoul(progress) {
         playSound('whistle');
-        gameState = 'KICK_TRANSITION'; // intermediate delay state
+        gameState = 'KICK_TRANSITION';
 
-        // If you progressed deep (>65%): Foul is inside box -> Penalty
-        // Otherwise: Foul is outside box -> Free kick
         if (progress > 65) {
             isFreeKick = false;
             dribbleStatusText = "PHẠM LỖI TRONG VÒNG CẤM! PENALTY!";
@@ -1048,7 +1665,6 @@
             gameState = 'AIMING';
             resetArena();
             if (isFreeKick) {
-                // Spawn a defensive wall midway (z = 200)
                 setupDefensiveWall();
                 document.getElementById('tip-text').innerText = "Cứa lòng (vuốt cong) để đưa bóng vòng qua hàng rào!";
             } else {
@@ -1059,8 +1675,8 @@
 
     function setupDefensiveWall() {
         wallDefenders = [];
-        const wallCount = 4; // 4 defenders stand side-by-side
-        const wallZ = 200; // positioned halfway
+        const wallCount = 4; 
+        const wallZ = 200; 
         const centerX = canvas.width / 2;
         const spacing = 32;
 
@@ -1080,18 +1696,18 @@
 
     // Frame update physics loop
     function updatePhysics() {
-        // DRIBBLE RUN PHASE GAMEPLAY LOOP
         if (gameState === 'DRIBBLE_RUN') {
             fieldScrollY += dribbler.speed;
-            dribblingProgress += 0.15; // Slow incremental progress up the pitch
+            dribblingProgress += 0.15; 
 
-            // Smoothly move player towards target input position
-            dribbler.x += (dribbler.targetX - dribbler.x) * 0.15;
+            if (joyActive) {
+                dribbler.x += dribbler.vx;
+            } else {
+                dribbler.x += (dribbler.targetX - dribbler.x) * 0.15;
+            }
 
-            // Constrain player within field boundary
             dribbler.x = Math.max(canvas.width * 0.15, Math.min(canvas.width * 0.85, dribbler.x));
 
-            // Randomly spawn tackle defenders descending down the pitch
             const now = Date.now();
             let spawnCooldown = 1200;
             if (currentDifficulty === 'EASY') spawnCooldown = 1800;
@@ -1110,11 +1726,9 @@
                 lastTacklerSpawnTime = now;
             }
 
-            // Update spawned defenders
             defensiveTacklers.forEach(t => {
                 t.y += t.speed;
 
-                // Defender triggers slide tackle when close enough to dribbler
                 const distToDribblerY = (canvas.height * 0.75) - t.y;
                 if (distToDribblerY < 180 && distToDribblerY > 0 && !t.isSliding) {
                     t.isSliding = true;
@@ -1125,30 +1739,24 @@
                 }
             });
 
-            // Keep only active defenders on screen
             defensiveTacklers = defensiveTacklers.filter(t => t.y < canvas.height + 50);
 
-            // Check if player runs into a Slide tackle to trigger FOUL!
             for (let i = 0; i < defensiveTacklers.length; i++) {
                 const t = defensiveTacklers[i];
                 const distanceX = Math.abs(dribbler.x - t.x);
                 const distanceY = Math.abs((canvas.height * 0.75) - t.y);
 
-                // Tackle collision box
                 if (distanceX < 35 && distanceY < 40) {
                     triggerFoul(dribblingProgress);
                     break;
                 }
             }
 
-            // If player completes the whole run without getting tackled, 
-            // trigger an automatic safe foul near penalty area!
             if (dribblingProgress >= 100) {
-                triggerFoul(80); // guaranteed penalty in the box
+                triggerFoul(80); 
             }
         }
 
-        // KICKING PHASE PHYSICS LOOP
         if (gameState === 'KICKING') {
             ball.x += ball.vx;
             ball.y += ball.vy;
@@ -1159,7 +1767,6 @@
 
             ball.radius = Math.max(6, 16 - (ball.z / 35));
 
-            // Goalkeeper moves towards jump target
             if (goalie.isDiving) {
                 let moveFactor = 0.15;
                 if (currentDifficulty === 'EASY') moveFactor = 0.08;
@@ -1169,10 +1776,9 @@
                 goalie.y += (goalie.targetY - goalie.y) * moveFactor;
             }
 
-            // Animate jumping defensive wall
             if (isFreeKick && wallJumping) {
                 wallJumpTimer += 0.08;
-                const jumpHeight = 35; // Pixels defenders jump
+                const jumpHeight = 35;
                 const offset = Math.sin(wallJumpTimer) * jumpHeight;
                 
                 if (offset < 0) {
@@ -1183,18 +1789,15 @@
                 }
             }
 
-            // Collision check: Defensive Wall blocks ball midway
             if (isFreeKick && ball.z > 170 && ball.z < 230) {
                 for (let i = 0; i < wallDefenders.length; i++) {
                     const d = wallDefenders[i];
                     const distToDefX = Math.abs(ball.x - d.x);
                     
-                    // Projected ball Y at wall depth
                     const defenderTop = d.baseY - d.jumpOffset - d.height;
                     const defenderBottom = d.baseY - d.jumpOffset;
 
                     if (distToDefX < d.width && ball.y >= defenderTop && ball.y <= defenderBottom) {
-                        // Collided with wall! Deflect trajectory away
                         ball.vx = (Math.random() - 0.5) * 6;
                         ball.vy = -Math.abs(ball.vy) * 0.4;
                         ball.vz = -ball.vz * 0.2;
@@ -1214,7 +1817,6 @@
             }
         }
 
-        // Animate celebratory confetti
         if (confettiParticles.length > 0) {
             confettiParticles.forEach(p => {
                 p.x += p.vx;
@@ -1232,8 +1834,9 @@
                 if (shootoutTurn % 2 === 1) {
                     triggerAIShooter();
                 } else {
-                    currentSelectedId = Math.floor(Math.random() * 10) + 1; 
-                    updateSelectedPlayerUI();
+                    const squadPosIdx = Math.floor(shootoutTurn / 2);
+                    currentSelectedId = activeSquadIds[squadPosIdx % 10]; 
+                    updateGameplayHUDShooter();
                     startDribbleRun();
                 }
             } else {
@@ -1246,43 +1849,41 @@
         }, 2500);
     }
 
-    // Main Canvas Drawing Loop
     function renderArena() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // STADIUM STAGE RENDERERS
         if (gameState !== 'DRIBBLE_RUN') {
             const horizon = goal.y + goal.h;
             
             // Sky Gradient
             const skyGrad = ctx.createLinearGradient(0, 0, 0, horizon);
-            skyGrad.addColorStop(0, '#040d06');
-            skyGrad.addColorStop(1, '#0e2413');
+            skyGrad.addColorStop(0, '#030804');
+            skyGrad.addColorStop(1, '#0c1a0e');
             ctx.fillStyle = skyGrad;
             ctx.fillRect(0, 0, canvas.width, horizon);
 
-            // Grass Pattern
+            // Grass
             const grassGrad = ctx.createLinearGradient(0, horizon, 0, canvas.height);
-            grassGrad.addColorStop(0, '#103014');
-            grassGrad.addColorStop(1, '#061608');
+            grassGrad.addColorStop(0, '#0c2610');
+            grassGrad.addColorStop(1, '#030a04');
             ctx.fillStyle = grassGrad;
             ctx.fillRect(0, horizon, canvas.width, canvas.height - horizon);
 
-            // Lines
-            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+            // Penalty box Lines
+            ctx.strokeStyle = 'rgba(255,255,255,0.12)';
             ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.moveTo(goal.x - 100, goal.y + goal.h);
-            ctx.lineTo(goal.x + goal.w + 100, goal.y + goal.h);
+            ctx.moveTo(goal.x - 120, goal.y + goal.h);
+            ctx.lineTo(goal.x + goal.w + 120, goal.y + goal.h);
             ctx.stroke();
 
-            // Circle
+            // Arc
             ctx.beginPath();
             ctx.arc(canvas.width / 2, canvas.height * 0.82, 110, Math.PI, 0);
             ctx.stroke();
 
             // Goal Net
-            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
             ctx.lineWidth = 1;
             for (let i = goal.x; i <= goal.x + goal.w; i += 22) {
                 ctx.beginPath();
@@ -1301,7 +1902,7 @@
             ctx.lineCap = 'round';
             ctx.strokeStyle = '#ffffff';
             ctx.shadowBlur = 10;
-            ctx.shadowColor = 'rgba(255,255,255,0.3)';
+            ctx.shadowColor = 'rgba(255,255,255,0.2)';
             ctx.lineWidth = 12;
             ctx.beginPath();
             ctx.moveTo(goal.x, goal.y + goal.h);
@@ -1311,10 +1912,8 @@
             ctx.stroke();
             ctx.shadowBlur = 0;
 
-            // Draw Goalkeeper
             drawGoalkeeper();
 
-            // Draw Defensive Wall
             if (isFreeKick) {
                 drawDefensiveWall();
             }
@@ -1349,7 +1948,7 @@
                 ctx.fill();
             }
 
-            // Swipe Guide lines
+            // Swiping line helper
             const isUserGK = (currentGameMode === 'GK') || (currentGameMode === 'TOURNAMENT' && shootoutTurn % 2 === 1);
             if (isDrawingSwipe && touchPoints.length > 1 && !isUserGK) {
                 ctx.strokeStyle = 'rgba(255, 215, 0, 0.8)';
@@ -1383,27 +1982,23 @@
                     ctx.restore();
                 });
             }
-        } 
-        
-        // DRIBBLING / ATTACK RUNNING STAGE RENDERER
-        else {
+        } else {
             drawDribblingStage();
         }
     }
 
     function drawDribblingStage() {
-        // Scrolling pitch grass bars
         const stripeHeight = 100;
         const offset = fieldScrollY % (stripeHeight * 2);
 
         for (let y = -stripeHeight * 2; y < canvas.height + stripeHeight; y += stripeHeight) {
             const index = Math.floor((y - fieldScrollY) / stripeHeight);
-            ctx.fillStyle = index % 2 === 0 ? '#103014' : '#0d2610';
+            ctx.fillStyle = index % 2 === 0 ? '#0c2610' : '#07180a';
             ctx.fillRect(0, y + offset, canvas.width, stripeHeight);
         }
 
-        // Draw Touch Boundary Lines
-        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        // Steer boundaries
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
         ctx.lineWidth = 4;
         ctx.beginPath();
         ctx.moveTo(canvas.width * 0.15, 0);
@@ -1412,34 +2007,30 @@
         ctx.lineTo(canvas.width * 0.85, canvas.height);
         ctx.stroke();
 
-        // Goal box visual coming up in the distance (as progress reaches 80%+)
         if (dribblingProgress > 50) {
             const progressY = canvas.height * 0.15 - (100 - dribblingProgress) * 5;
-            ctx.fillStyle = 'rgba(255,255,255,0.05)';
+            ctx.fillStyle = 'rgba(255,255,255,0.03)';
             ctx.fillRect(canvas.width * 0.25, progressY, canvas.width * 0.5, 200);
-            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
             ctx.strokeRect(canvas.width * 0.25, progressY, canvas.width * 0.5, 200);
         }
 
-        // Draw Player (Dribbler)
+        // Draw Player
         const px = dribbler.x;
         const py = canvas.height * 0.75;
         
-        // Draw dribbler body (Vietnam red jersey)
         ctx.fillStyle = '#da251d';
         ctx.fillRect(px - 14, py - 30, 28, 40);
-        // Head
         ctx.fillStyle = '#f59e0b';
         ctx.beginPath();
         ctx.arc(px, py - 40, 10, 0, Math.PI * 2);
         ctx.fill();
-        // Hair
         ctx.fillStyle = '#000000';
         ctx.beginPath();
         ctx.arc(px, py - 44, 10, Math.PI, 0);
         ctx.fill();
 
-        // Draw dribbling Ball right in front of the player
+        // Draw Dribbled Ball
         const ballOffset = Math.sin(Date.now() / 80) * 5;
         ctx.fillStyle = '#ffffff';
         ctx.beginPath();
@@ -1449,25 +2040,19 @@
         ctx.lineWidth = 1;
         ctx.stroke();
 
-        // Draw opponent defenders charging down
+        // Draw Tacklers
         defensiveTacklers.forEach(t => {
-            // Draw Blue Jersey
-            ctx.fillStyle = '#1d4ed8'; // Blue kit
+            ctx.fillStyle = '#1d4ed8'; 
             ctx.fillRect(t.x - 14, t.y - 30, 28, 40);
-            
-            // Head
             ctx.fillStyle = '#f59e0b';
             ctx.beginPath();
             ctx.arc(t.x, t.y - 40, 10, 0, Math.PI * 2);
             ctx.fill();
 
-            // Slide tackle visual
             if (t.isSliding) {
                 ctx.strokeStyle = '#ef4444';
                 ctx.lineWidth = 4;
                 ctx.strokeRect(t.x - 22, t.y, 44, 20);
-                
-                // Tackle dust
                 ctx.fillStyle = 'rgba(255,255,255,0.3)';
                 ctx.beginPath();
                 ctx.arc(t.x + (Math.random() - 0.5)*30, t.y + 20, 15, 0, Math.PI*2);
@@ -1475,21 +2060,61 @@
             }
         });
 
-        // Top progress bar showing run completion
+        // Top UI progress
         ctx.fillStyle = 'rgba(0,0,0,0.5)';
-        ctx.fillRect(canvas.width * 0.2, 70, canvas.width * 0.6, 12);
-        ctx.fillStyle = '#eab308'; // Gold progress
-        ctx.fillRect(canvas.width * 0.2, 70, canvas.width * 0.6 * (dribblingProgress / 100), 12);
+        ctx.fillRect(canvas.width * 0.2, 110, canvas.width * 0.6, 12);
+        ctx.fillStyle = '#fbbf24'; 
+        ctx.fillRect(canvas.width * 0.2, 110, canvas.width * 0.6 * (dribblingProgress / 100), 12);
 
-        // UI text elements
         ctx.fillStyle = '#ffffff';
         ctx.font = '900 24px Montserrat';
         ctx.textAlign = 'center';
-        ctx.fillText("PHÁ TẤN CÔNG NHANH!", canvas.width / 2, 50);
+        ctx.fillText("PHÁ TẤN CÔNG NHANH!", canvas.width / 2, 90);
 
-        ctx.font = '600 14px Montserrat';
+        ctx.font = '600 12px Montserrat';
         ctx.fillStyle = '#fef08a';
-        ctx.fillText(dribbleStatusText, canvas.width / 2, 105);
+        ctx.fillText(dribbleStatusText, canvas.width / 2, 140);
+
+        // Render On-Screen Virtual Controls (Left Joystick & Skill Move button)
+        drawVirtualControls();
+    }
+
+    function drawVirtualControls() {
+        // Left Analog Base
+        ctx.fillStyle = 'rgba(255,255,255,0.15)';
+        ctx.beginPath();
+        ctx.arc(joyBase.x, joyBase.y, joyBase.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Left Analog Knob
+        ctx.fillStyle = joyActive ? 'rgba(255, 215, 0, 0.7)' : 'rgba(255,255,255,0.4)';
+        ctx.beginPath();
+        ctx.arc(joyKnob.x, joyKnob.y, joyKnob.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Right Skill Button representation info
+        const btnX = canvas.width - 100;
+        const btnY = canvas.height - 110;
+        const btnR = 40;
+
+        ctx.fillStyle = 'rgba(218, 37, 29, 0.4)';
+        ctx.beginPath();
+        ctx.arc(btnX, btnY, btnR, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#da251d';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 10px Montserrat';
+        ctx.textAlign = 'center';
+        ctx.fillText("BỨT TỐC", btnX, btnY + 3);
     }
 
     function drawDefensiveWall() {
@@ -1497,25 +2122,20 @@
             const dy = d.baseY - d.jumpOffset;
             
             ctx.save();
-            // Opponent defensive wall (e.g., navy blue jerseys)
             ctx.fillStyle = '#1e3a8a';
             ctx.fillRect(d.x - d.width/2, dy - d.height, d.width, d.height);
 
-            // Shorts
             ctx.fillStyle = '#1e2937';
             ctx.fillRect(d.x - d.width/2, dy - 20, d.width, 10);
 
-            // Legs
             ctx.fillStyle = '#f59e0b';
             ctx.fillRect(d.x - d.width/4, dy - 10, d.width/4, 10);
             ctx.fillRect(d.x + d.width/8, dy - 10, d.width/4, 10);
 
-            // Heads
             ctx.beginPath();
             ctx.arc(d.x, dy - d.height - 8, 10, 0, Math.PI * 2);
             ctx.fill();
 
-            // Crossed hands blocking pose
             ctx.strokeStyle = '#1e3a8a';
             ctx.lineWidth = 6;
             ctx.beginPath();
@@ -1536,7 +2156,7 @@
         const isUserGK = (currentGameMode === 'GK') || (currentGameMode === 'TOURNAMENT' && shootoutTurn % 2 === 1);
         
         if (isUserGK) {
-            ctx.fillStyle = '#eab308'; // Bùi Tấn Trường Yellow Kit
+            ctx.fillStyle = '#eab308'; 
         } else {
             if (currentGameMode === 'TOURNAMENT') {
                 if (currentTournamentRound === 1) ctx.fillStyle = '#ef4444'; 
@@ -1547,25 +2167,20 @@
             }
         }
 
-        // Body
         ctx.fillRect(x - 18, y - 75, 36, 50);
 
-        // Pants
         ctx.fillStyle = isUserGK ? '#ca8a04' : '#1f2937';
         ctx.fillRect(x - 18, y - 25, 36, 15);
 
-        // Legs
         ctx.fillStyle = '#111111';
         ctx.fillRect(x - 14, y - 10, 8, 10);
         ctx.fillRect(x + 6, y - 10, 8, 10);
 
-        // Jersey Number
         ctx.fillStyle = isUserGK ? '#da251d' : '#ffffff';
         ctx.font = 'bold 16px Montserrat';
         ctx.textAlign = 'center';
         ctx.fillText('1', x, y - 45);
 
-        // Head & Hair
         ctx.fillStyle = '#f59e0b';
         ctx.beginPath();
         ctx.arc(x, y - 85, 12, 0, Math.PI*2);
@@ -1576,7 +2191,6 @@
         ctx.arc(x, y - 91, 12, Math.PI, 0);
         ctx.fill();
 
-        // Hands
         ctx.strokeStyle = isUserGK ? '#eab308' : '#22c55e';
         ctx.lineWidth = 10;
         ctx.lineCap = 'round';
@@ -1618,16 +2232,91 @@
         ctx.restore();
     }
 
-    function gameLoop() {
-        updatePhysics();
-        renderArena();
-        gameLoopId = requestAnimationFrame(gameLoop);
+    function resetArena() {
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height * 0.85;
+        ball.z = 0;
+        ball.vx = 0;
+        ball.vy = 0;
+        ball.vz = 0;
+        ball.spin = 0;
+
+        goalie.x = canvas.width / 2;
+        goalie.y = goal.y + goal.h;
+        goalie.isDiving = false;
+        goalie.targetX = goalie.x;
+        goalie.targetY = goalie.y;
+
+        isFreeKick = false;
+        wallDefenders = [];
+        wallJumping = false;
+        wallJumpTimer = 0;
     }
 
-    window.onload = () => {
+    function exitToMenu() {
+        document.getElementById('main-content').classList.remove('hidden');
+        document.getElementById('footer-tabs').classList.remove('hidden');
+        document.getElementById('gameplay-hud').classList.add('hidden');
+        document.getElementById('btn-back-menu').classList.add('hidden');
+        document.getElementById('game-tip').classList.add('hidden');
+        gameState = 'MENU';
+        updateTournamentMap();
+    }
+
+    function renderPenaltyDots() {
+        const dotsContainer = document.getElementById('penalty-dots-hud');
+        dotsContainer.innerHTML = '';
+        
+        for (let i = 0; i < 5; i++) {
+            let uColor = 'bg-gray-600';
+            if (userShootoutResults[i] === 'GOAL') uColor = 'bg-green-500';
+            else if (userShootoutResults[i] === 'MISS') uColor = 'bg-red-500';
+
+            let oColor = 'bg-gray-600';
+            if (oppShootoutResults[i] === 'GOAL') oColor = 'bg-green-400';
+            else if (oppShootoutResults[i] === 'MISS') oColor = 'bg-red-500';
+
+            dotsContainer.innerHTML += `
+                <div class="flex flex-col items-center gap-1">
+                    <div class="w-2.5 h-2.5 rounded-full ${uColor}"></div>
+                    <div class="w-2.5 h-2.5 rounded-full ${oColor} opacity-70"></div>
+                </div>
+            `;
+        }
+    }
+
+    function updateScoresUI() {
+        document.getElementById('score-val').innerText = score;
+        document.getElementById('opp-score-val').innerText = misses;
+        if (currentGameMode === 'TOURNAMENT') {
+            renderPenaltyDots();
+        }
+    }
+
+    function updateTournamentMap() {
+        for (let r = 1; r <= 3; r++) {
+            const item = document.getElementById(`t-round-${r}`);
+            const status = document.getElementById(`t-status-${r}`);
+            if (r < currentTournamentRound) {
+                item.className = "flex justify-between items-center p-3.5 rounded-xl bg-green-950/40 text-green-400 border border-green-500/20";
+                status.innerText = "ĐÃ THẮNG ✓";
+            } else if (r === currentTournamentRound) {
+                item.className = "flex justify-between items-center p-3.5 rounded-xl bg-yellow-500/10 text-white border border-yellow-500/40 animate-pulse";
+                status.innerText = "SẴN SÀNG";
+            } else {
+                item.className = "flex justify-between items-center p-3.5 rounded-xl bg-black/40 text-gray-600";
+                status.innerText = "CHƯA MỞ";
+            }
+        }
+    }
+
+    // Start running loops
+    function startLoops() {
         init();
         gameLoop();
-    };
+    }
+
+    window.onload = startLoops;
 
 </script>
 </body>
